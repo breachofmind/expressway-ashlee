@@ -1,0 +1,30 @@
+{
+  "name": "expressway-ashlee",
+  "version": "0.0.1",
+  "description": "A CMS for Node.js and the Expressway microframework",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/breachofmind/expressway-ashlee.git"
+  },
+  "keywords": [
+    "cms",
+    "node",
+    "express",
+    "angular"
+  ],
+  "author": "Mike Adamczyk <mike@bom.us>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/breachofmind/expressway-ashlee/issues"
+  },
+  "homepage": "https://github.com/breachofmind/expressway-ashlee#readme",
+  "dependencies": {
+    "bluebird": "^3.4.6",
+    "express": "^4.14.0",
+    "sharp": "^0.16.2"
+  }
+}
