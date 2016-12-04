@@ -17,10 +17,7 @@ class GraphicsProvider extends Expressway.Provider
     {
         super(app);
 
-        this.requires = [
-            'CoreProvider',
-            'LoggerProvider',
-        ];
+        this.requires('CoreProvider', 'LoggerProvider');
     }
 
     /**
@@ -29,9 +26,9 @@ class GraphicsProvider extends Expressway.Provider
      */
     register(app)
     {
-        var MediaService = require('../services/MediaService');
+        let MediaService = require('../services/MediaService');
 
-        var mediaService = new MediaService({
+        let mediaService = new MediaService({
 
             "original" : function(image,meta) {
                 // We can't be storing giant images on the server.

@@ -3,7 +3,7 @@
 var Expressway  = require('expressway');
 var app         = Expressway.app;
 var Path        = require('path');
-var Promise     = require('bluebird');
+var Promise     = Expressway.Promise;
 var fs          = require('fs');
 var sharp       = require('sharp');
 

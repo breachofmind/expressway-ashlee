@@ -2,14 +2,13 @@ var Expressway = require('expressway');
 
 class CMSIndexController extends Expressway.Controller
 {
-    constructor()
-    {
-        super();
+    get description() {
+        return "Handles all Ashlee CMS requests"
     }
 
     index(request,response,next,view)
     {
-        return "Hello from Ashlee";
+        return view("$cms:index");
     }
 }
 
