@@ -2,12 +2,12 @@
 
 var Expressway  = require('expressway');
 var app         = Expressway.app;
-var Path        = require('path');
+var path        = require('path');
 var Promise     = Expressway.Promise;
 var fs          = require('fs');
 var sharp       = require('sharp');
 
-var [url,path,log,debug] = app.get('url','path','log','debug');
+var [url,paths,log,debug] = app.get('url','paths','log','debug');
 
 /**
  * A class for common image manipulations.
@@ -34,11 +34,11 @@ class MediaService
      */
     path(fileName, size)
     {
-        var resolvedSize = this.size(fileName,size);
+        let resolvedSize = this.size(fileName,size);
         if (! resolvedSize) {
             return null;
         }
-        return path.uploads(resolvedSize+"/"+fileName).get();
+        return paths.uploads(resolvedSize+"/"+fileName);
     }
 
     /**
@@ -50,7 +50,7 @@ class MediaService
      */
     url(fileName, size, notFound = null)
     {
-        var resolvedSize = this.size(fileName,size);
+        let resolvedSize = this.size(fileName,size);
         if (! resolvedSize) {
             return notFound;
         }
@@ -68,11 +68,11 @@ class MediaService
     {
         if (! this.has(size)) return null;
 
-        var index = this.degradation.indexOf(size);
+        let index = this.degradation.indexOf(size);
 
         for(index; index < this.degradation.length; index++) {
 
-            var file = path.uploads(this.degradation[index]+"/"+fileName);
+            let file = paths.obj.uploads(this.degradation[index]+"/"+fileName);
 
             // This file size does exist.
             if (file.exists) {
@@ -105,18 +105,18 @@ class MediaService
         if (! this.sizes[size]) {
             throw new Error(`No size configured for "${size}"`);
         }
-        var image = sharp(inputFile);
+        let image = sharp(inputFile);
 
         // If the size is called and returns false,
         // don't allow the manipulation to occur.
         return image.metadata().then(meta =>
         {
             meta.size = size;
-            var modified = this.sizes[size].call(null, image, meta, sharp);
+            let modified = this.sizes[size].call(null, image, meta, sharp);
             if (! modified) {
                 return null;
             }
-            var outputFileName = typeof outputFile == 'function' ? outputFile(inputFile,meta) : outputFile;
+            let outputFileName = typeof outputFile == 'function' ? outputFile(inputFile,meta) : outputFile;
 
             log.info("Creating File: %s -> %s",inputFile, outputFileName);
 
@@ -133,11 +133,11 @@ class MediaService
      */
     upload(inputFile, sizes = ['original','thumb','medium','large'])
     {
-        var promises = sizes.map(size =>
+        let promises = sizes.map(size =>
         {
             return this.generate(size, inputFile, function(filePath, meta) {
-                var fileName = Path.basename(filePath);
-                return path.uploads(size+"/"+fileName).get();
+                let fileName = path.basename(filePath);
+                return paths.uploads(size+"/"+fileName);
             })
         });
 
@@ -155,7 +155,7 @@ class MediaService
 
         this.sizes[name] = manipulator;
 
-        path.set("uploads_"+name, path.uploads(name).get(), true);
+        paths.set("uploads_"+name, paths.uploads(name), true);
 
         this[name] = function(inputFile,outputFile) {
             return this.generate(name, inputFile, outputFile);

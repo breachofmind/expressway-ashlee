@@ -1,0 +1,67 @@
+$snackbar-width: 600px !default;
+$snackbar-height: 70px !default;
+$snackbar-background: rgba(black,0.8) !default;
+$snackbar-radius: $global-radius !default;
+$snackbar-font-size: 16px;
+
+@mixin snackbar-message-color($color)
+{
+	.snackbar-container.#{$color} {
+		.snackbar-message {
+			color:get-color($color);
+			svg {
+				fill:get-color($color);
+			}
+		}
+	}
+}
+
+.snackbar-wrapper {
+	position:fixed;
+	bottom:-10px;
+	left:0;
+	right:0;
+	width:100%;
+	transition: all .3s ease;
+}
+
+.snackbar-container {
+	margin:0 auto;
+	border-radius:$snackbar-radius;
+	height:$snackbar-height;
+	width: 100%;
+	max-width: $snackbar-width;
+	background:$snackbar-background;
+	box-shadow:$card-shadow;
+	padding:15px;
+}
+
+.snackbar-message {
+	color:color-pick-contrast($snackbar-background);
+	font-size:$snackbar-font-size;
+	.ashlee-icon {
+		position:relative;
+		top:5px;
+	}
+}
+
+@include snackbar-message-color(success);
+@include snackbar-message-color(warning);
+@include snackbar-message-color(alert);
+
+
+// ---------------------------
+// Transitions
+// ---------------------------
+.snackbar-enter {
+	transform:translateY($snackbar-height);
+}
+
+.snackbar-leave-active {
+	transform:translateY($snackbar-height);
+}
+
+.snackbar-enter .snackbar-container,
+.snackbar-leave-active .snackbar-container {
+	transform: translateY(0px);
+}

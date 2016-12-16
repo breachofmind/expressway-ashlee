@@ -1,0 +1,55 @@
+@extends(layouts/auth)
+
+@section(content)
+
+    <header class="ashlee-login-header">
+        <h1>Login</h1>
+    </header>
+
+    @component(FlashMessage, data.message)
+
+    <form action="/auth/login" method="POST" class="ashlee-login-form">
+
+        <input type="hidden" name="_csrf" value="{{= data.$request.csrfToken() }}">
+
+
+
+        <div class="row ashlee-login-username">
+            <div class="small-3 columns">
+                <label for="Input_username" class="middle">Username</label>
+            </div>
+            <div class="small-9 columns relative">
+                <input type="text" name="username" id="Input_username">
+            </div>
+        </div>
+
+        <div class="row ashlee-login-username">
+            <div class="small-3 columns">
+                <label for="Input_password" class="middle">Passcode</label>
+            </div>
+            <div class="small-9 columns">
+                <input type="password" name="password" id="Input_password">
+            </div>
+        </div>
+
+        <div class="row ashlee-login-actions">
+            <div class="small-8 columns">
+                <ul class="menu">
+                    <li><a href="/">Back to Site</a></li>
+                    <li><a href="/auth/login/reset">Forgot Password?</a></li>
+                </ul>
+
+            </div>
+
+            <div class="small-4 columns text-right">
+                <button type="submit" class="button success">Enter</button>
+            </div>
+        </div>
+
+    </form>
+
+    <footer class="ashlee-login-footer">
+        <p>Ashlee CMS v.{{data.cmsVersion}}</p>
+    </footer>
+
+@endsection

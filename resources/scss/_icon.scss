@@ -1,0 +1,75 @@
+$button-icon-size: map-get($button-sizes,default) !default;
+
+.ashlee-icon {
+	display:inline-block;
+	svg {
+		width:24px;
+		height:24px;
+		display:block;
+	}
+}
+
+.button {
+	box-shadow:1px 1px 1px rgba(black,0.2);
+	text-transform: uppercase;
+}
+
+.button.has-icon {
+	position:relative;
+	padding-left:40px;
+	.ashlee-icon {
+		transition:all 500ms;
+		position:absolute;
+		left:10px;
+		top:calc(50% - 10px);
+	}
+	.ashlee-icon svg {
+		width:20px;
+		height:20px;
+		fill:color-pick-contrast(get-color(primary));
+	}
+	&.primary .ashlee-icon svg {
+		fill:color-pick-contrast(get-color(primary));
+	}
+	&.secondary .ashlee-icon svg {
+		fill:color-pick-contrast(get-color(secondary));
+	}
+	&.success .ashlee-icon svg {
+		fill:color-pick-contrast(get-color(success));
+	}
+
+	&.loader {
+		.ashlee-icon {
+			animation:loaderWait 600ms infinite alternate;
+		}
+		&.loading .ashlee-icon {
+			animation:loading 400ms linear infinite;
+		}
+	}
+	&[disabled].loader {
+		.ashlee-icon {
+			animation:none;
+		}
+	}
+}
+
+.ashlee-icon.loading {
+	animation:loading 400ms linear infinite;
+}
+
+.loading-icon {
+	text-align:center;
+}
+
+@keyframes loading
+{
+	0% {transform:rotate(0deg)}
+	100% {transform:rotate(360deg)}
+}
+
+@keyframes loaderWait
+{
+	0% {transform:scale(1);}
+	100% {transform:scale(1.4);}
+
+}

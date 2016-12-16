@@ -18,7 +18,8 @@ class AshleeFrontend extends Expressway.Middleware
             // Adds a bit of javascript to the frontend
             // that gives the current user page controls.
             response.viewData.push(function(view) {
-                // TODO
+                //TODO
+                //view.script('ashlee', '/cms/static/frontend.js');
             })
         }
         next();

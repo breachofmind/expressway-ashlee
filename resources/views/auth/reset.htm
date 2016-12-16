@@ -1,0 +1,24 @@
+@extends(layouts/auth)
+
+@section(content)
+
+    <h1>Reset Password</h1>
+
+    @component(FlashMessage, data.message)
+
+    <form action="/auth/login/reset/{{= data.requester.reset_token }}" method="POST">
+
+        <label for="Username">Username
+            <input type="text" name="username" id="Username" disabled value="{{= data.requester.email }}">
+        </label>
+
+        <label for="Password">New Password
+            <input type="password" name="password" id="Password">
+        </label>
+
+        <input type="hidden" name="_csrf" value="{{= data.$request.csrfToken() }}">
+
+        <button type="submit" class="button">Reset Password</button>
+    </form>
+
+@endsection

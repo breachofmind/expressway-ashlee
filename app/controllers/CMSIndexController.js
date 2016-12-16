@@ -8,7 +8,7 @@ class CMSIndexController extends Expressway.Controller
 
     index(request,response,next,view)
     {
-        return view("$cms:index");
+        return view("$cms:index").use(this.defaults);
     }
 }
 

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{{data.title}}:Ashlee CMS</title>
+	{{= data.meta}}
+	{{= data.styles}}
+</head>
+<body>
+	<main id="Ashlee-app">
+		@yield(content)
+
+		<modal></modal>
+		<snackbar></snackbar>
+	</main>
+
+	{{= data.scripts}}
+</body>
+</html>
