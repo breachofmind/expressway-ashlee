@@ -21,7 +21,8 @@ $table-head-border: 3px solid #272727;
 			display:block;
 		}
 		&-th, &-td {
-			display:block;
+			display:flex;
+			align-items:center;
 			width:100%;
 			padding:8px 10px;
 		}

@@ -1,26 +1,21 @@
 "use strict";
 
-var Expressway = require('expressway');
+var Middleware = require('expressway').Middleware;
 
-class AshleeFrontend extends Expressway.Middleware
+class AshleeFrontend extends Middleware
 {
-    get type() {
-        return "AshleeCMSModule"
-    }
-
     get description() {
         return  "Detects if user is logged in and can edit things on the frontend"
     }
 
-    method(request,response,next)
+    method(request,response,next,app)
     {
         if (request.user) {
             // Adds a bit of javascript to the frontend
             // that gives the current user page controls.
-            response.viewData.push(function(view) {
-                //TODO
-                //view.script('ashlee', '/cms/static/frontend.js');
-            })
+            response.view.use(function(view) {
+                view.script('ashlee', app.alias('static') + 'frontend.js');
+            });
         }
         next();
     }

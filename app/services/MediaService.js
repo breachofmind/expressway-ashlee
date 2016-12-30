@@ -1,166 +1,169 @@
 "use strict";
 
-var Expressway  = require('expressway');
-var app         = Expressway.app;
+var expressway  = require('expressway');
 var path        = require('path');
-var Promise     = Expressway.Promise;
+var Promise     = expressway.Promise;
 var fs          = require('fs');
 var sharp       = require('sharp');
+var _           = require('lodash');
 
-var [url,paths,log,debug] = app.get('url','paths','log','debug');
-
-/**
- * A class for common image manipulations.
- * @constructor
- */
-class MediaService
+module.exports = function(app,url,paths,log,debug)
 {
-    constructor(sizes = {})
-    {
-        this.sizes = {};
-        this.degradation = ['thumb','medium','large','original'];
-
-        Object.keys(sizes).forEach(size => {
-            this.add(size, sizes[size]);
-        })
-    }
-
     /**
-     * Return the path to a file.
-     * Resolves to a lesser file size if the given file size doesn't exist.
-     * @param fileName string
-     * @param size string
-     * @returns {string}
+     * A class for common image manipulations.
+     * @constructor
      */
-    path(fileName, size)
+    return new class MediaService
     {
-        let resolvedSize = this.size(fileName,size);
-        if (! resolvedSize) {
-            return null;
-        }
-        return paths.uploads(resolvedSize+"/"+fileName);
-    }
-
-    /**
-     * Like path(), only returns a URL to the image.
-     * @param fileName string
-     * @param size string
-     * @param notFound string - optional
-     * @returns {string|null}
-     */
-    url(fileName, size, notFound = null)
-    {
-        let resolvedSize = this.size(fileName,size);
-        if (! resolvedSize) {
-            return notFound;
-        }
-        return url("uploads/"+resolvedSize+"/"+fileName); // Todo, dynamic
-    }
-
-    /**
-     * Given the size and file name,
-     * check for the size or next best size.
-     * @param fileName string
-     * @param size string
-     * @returns {string|null}
-     */
-    size(fileName, size)
-    {
-        if (! this.has(size)) return null;
-
-        let index = this.degradation.indexOf(size);
-
-        for(index; index < this.degradation.length; index++) {
-
-            let file = paths.obj.uploads(this.degradation[index]+"/"+fileName);
-
-            // This file size does exist.
-            if (file.exists) {
-                return this.degradation[index];
-            }
-        }
-        return null;
-    }
-
-
-    /**
-     * Check if a given size is registered.
-     * @param size string
-     * @returns {boolean}
-     */
-    has(size)
-    {
-        return this.sizes.hasOwnProperty(size);
-    }
-
-    /**
-     * Generate a new size.
-     * @param size string
-     * @param inputFile string
-     * @param outputFile string|function
-     * @returns {*}
-     */
-    generate(size, inputFile, outputFile)
-    {
-        if (! this.sizes[size]) {
-            throw new Error(`No size configured for "${size}"`);
-        }
-        let image = sharp(inputFile);
-
-        // If the size is called and returns false,
-        // don't allow the manipulation to occur.
-        return image.metadata().then(meta =>
+        constructor()
         {
-            meta.size = size;
-            let modified = this.sizes[size].call(null, image, meta, sharp);
-            if (! modified) {
+            this.sizes = {};
+            this.degradation = ['thumb','medium','large','original'];
+        }
+
+        get name() {
+            return this.constructor.name;
+        }
+
+        /**
+         * Return the path to a file.
+         * Resolves to a lesser file size if the given file size doesn't exist.
+         * @param fileName string
+         * @param size string
+         * @returns {string}
+         */
+        path(fileName, size)
+        {
+            let resolvedSize = this.size(fileName,size);
+            if (! resolvedSize) {
                 return null;
             }
-            let outputFileName = typeof outputFile == 'function' ? outputFile(inputFile,meta) : outputFile;
+            return paths.uploads(resolvedSize+"/"+fileName);
+        }
 
-            log.info("Creating File: %s -> %s",inputFile, outputFileName);
-
-            return modified.toFile(outputFileName);
-        });
-    }
-
-    /**
-     * Special method for uploading a file.
-     * Saves the file in the given size directories.
-     * @param inputFile string
-     * @param sizes array
-     * @returns {Promise}
-     */
-    upload(inputFile, sizes = ['original','thumb','medium','large'])
-    {
-        let promises = sizes.map(size =>
+        /**
+         * Like path(), only returns a URL to the image.
+         * @param fileName string
+         * @param size string
+         * @param notFound string - optional
+         * @returns {string|null}
+         */
+        url(fileName, size, notFound = null)
         {
-            return this.generate(size, inputFile, function(filePath, meta) {
-                let fileName = path.basename(filePath);
-                return paths.uploads(size+"/"+fileName);
-            })
-        });
+            let resolvedSize = this.size(fileName,size);
+            if (! resolvedSize) {
+                return notFound;
+            }
+            return url.get("uploads/"+resolvedSize+"/"+fileName); // Todo, dynamic
+        }
 
-        return Promise.all(promises);
-    }
+        /**
+         * Given the size and file name,
+         * check for the size or next best size.
+         * @param fileName string
+         * @param size string
+         * @returns {string|null}
+         */
+        size(fileName, size)
+        {
+            if (! this.has(size)) return null;
 
-    /**
-     * Add a new size manipulator, as well as an uploads path and method.
-     * @param name string
-     * @param manipulator function
-     */
-    add(name, manipulator)
-    {
-        debug(this, "Adding size: %s", name);
+            let index = this.degradation.indexOf(size);
 
-        this.sizes[name] = manipulator;
+            for(index; index < this.degradation.length; index++) {
 
-        paths.set("uploads_"+name, paths.uploads(name), true);
+                let file = paths.obj.uploads(this.degradation[index]+"/"+fileName);
 
-        this[name] = function(inputFile,outputFile) {
-            return this.generate(name, inputFile, outputFile);
+                // This file size does exist.
+                if (file.exists) {
+                    return this.degradation[index];
+                }
+            }
+            return null;
+        }
+
+
+        /**
+         * Check if a given size is registered.
+         * @param size string
+         * @returns {boolean}
+         */
+        has(size)
+        {
+            return this.sizes.hasOwnProperty(size);
+        }
+
+        /**
+         * Generate a new size.
+         * @param size string
+         * @param inputFile string
+         * @param outputFile string|function
+         * @returns {*}
+         */
+        generate(size, inputFile, outputFile)
+        {
+            if (! this.sizes[size]) {
+                throw new Error(`no size configured: ${size}`);
+            }
+            let image = sharp(inputFile);
+
+            // If the size is called and returns false,
+            // don't allow the manipulation to occur.
+            return image.metadata().then(meta =>
+            {
+                meta.size = size;
+                let modified = this.sizes[size].call(null, image, meta, sharp);
+                if (! modified) {
+                    return null;
+                }
+                let outputFileName = typeof outputFile == 'function' ? outputFile(inputFile,meta) : outputFile;
+
+                log.info("creating file: %s -> %s",inputFile, outputFileName);
+
+                return modified.toFile(outputFileName);
+            });
+        }
+
+        /**
+         * Special method for uploading a file.
+         * Saves the file in the given size directories.
+         * @param inputFile string
+         * @param sizes array
+         * @returns {Promise}
+         */
+        upload(inputFile, sizes = ['original','thumb','medium','large'])
+        {
+            let promises = sizes.map(size =>
+            {
+                return this.generate(size, inputFile, function(filePath, meta) {
+                    let fileName = path.basename(filePath);
+                    return paths.uploads(size+"/"+fileName);
+                })
+            });
+
+            return Promise.all(promises);
+        }
+
+        /**
+         * Add a new size manipulator, as well as an uploads path and method.
+         * @param name string
+         * @param manipulator function
+         */
+        add(name, manipulator)
+        {
+            if (typeof name == 'object') {
+                _.each(name,(fn,size) => { this.add(size,fn) });
+                return this;
+            }
+            this.sizes[name] = manipulator;
+
+            debug("MediaService added size: %s", name);
+
+            paths.add("uploads_"+name, paths.uploads(name));
+
+            this[name] = function(inputFile,outputFile) {
+                return this.generate(name, inputFile, outputFile);
+            }
         }
     }
-}
-
-module.exports = MediaService;
+};

@@ -1,7 +1,6 @@
 <template>
 	<div class="ashlee-td" :data-col="field">
-		<a href="#" v-if="isTitle">{{value}}</a>
-		<span v-else>{{value}}</span>
+		<component :is="'_'+field.type" :record="record" :field="field" :definition="definition"></component>
 	</div>
 </template>
 
@@ -9,14 +8,9 @@
 	module.exports = {
 	    name:"cms-table-cell",
 		props:['record','field','column','definition'],
-		computed: {
-	        value() {
-	            return this.record[this.field];
-	        },
-			isTitle()
-			{
-			    return this.definition.title == this.field;
-			}
+		components: {
+	        _text: require('./types/text.vue'),
+	        _email: require('./types/email.vue')
 		}
 	}
 </script>

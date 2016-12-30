@@ -1,6 +1,3 @@
-global.__ashlee_root = __dirname + "/";
+"use strict";
 
-module.exports = [
-    require('./app/providers/GraphicsProvider'),
-    require('./app/providers/AshleeCMSModule')
-];
+module.exports = require('./app/AshleeCMSExtension');

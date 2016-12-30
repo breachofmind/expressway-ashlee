@@ -1,13 +1,9 @@
 "use strict";
 
-var Expressway = require('expressway');
+var Middleware = require('expressway').Middleware;
 
-class AshleeNotFound extends Expressway.Middleware
+class AshleeNotFound extends Middleware
 {
-    get type() {
-        return "AshleeCMSModule"
-    }
-
     get description() {
         return  "The default 404 Not Found page for Ashlee CMS"
     }

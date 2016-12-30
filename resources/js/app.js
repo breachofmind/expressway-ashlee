@@ -4,12 +4,9 @@ var store = require('./store');
 var app = new Vue({
     store,
     el :"#Ashlee-app",
-    data: {
-        user:null,
-    },
     mounted()
     {
-        this.$store.commit('getCurrentUser', this.$api);
+        this.$store.commit('getState', this.$api.state());
     },
     components: {
         'cms-table' : require('../vue/table/table.vue')

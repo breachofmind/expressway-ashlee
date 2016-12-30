@@ -2,32 +2,18 @@ var Vuex = require('vuex');
 
 var store = new Vuex.Store({
     state: {
+        loading: true,
         currentUser: null,
-        definitions: {
-            user: {
-                title: 'email',
-                fields: ['email','first_name','last_name'],
-                labels: {
-                    email: "Email",
-                    first_name: "First Name",
-                    last_name: "Last Name",
-                },
-            },
-            media: {
-                title:'file_name',
-                fields: ['file_name','file_type'],
-                labels: {
-                    file_name: "File Name",
-                    file_type: "Type",
-                }
-            }
-        }
+        definitions: {}
     },
     mutations: {
-        getCurrentUser(state, api)
+        getState(state, promise)
         {
-            api.currentUser().then(user => {
-                state.currentUser = user;
+            state.loading = true;
+            promise.then(response => {
+                state.loading = false;
+                state.user = response.user;
+                state.definitions = response.defs;
             });
         }
     }

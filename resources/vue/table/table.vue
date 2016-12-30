@@ -7,7 +7,6 @@
 						<input type="checkbox" v-model="checkAll" @change="selectAll($event)">
 					</div>
 					<heading v-for="(field,column) in fields"
-					         @selectAll="selectAll(boolean)"
 					         :field="field"
 					         :column="column"
 					         :definition="definition">
@@ -56,11 +55,11 @@
 		computed: {
 			definition()
 			{
-			    return this.$store.state.definitions[this.resource];
+			    return this.$store.state.loading ? {} :this.$store.state.definitions[this.resource];
 			},
 			fields()
 			{
-			    return this.definition.fields;
+			    return this.$store.state.loading ? [] : this.definition.fields;
 			},
 			populated()
 			{

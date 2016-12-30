@@ -1,6 +1,6 @@
 <template>
 	<div class="ashlee-th">
-		{{label}}
+		{{field.label}}
 	</div>
 </template>
 
@@ -8,15 +8,5 @@
 	module.exports = {
 	    name:"cms-table-heading",
 		props:['field','column','definition'],
-		data() {
-	        return {
-	            checkAll: false
-	        }
-		},
-		computed: {
-            label() {
-                return this.definition.labels[this.field] || this.field;
-	        }
-		}
 	}
 </script>

@@ -1,5 +1,18 @@
+"use strict";
+
 var $http = require('axios');
 var BASE = "/api/v1/";
+var DEFAULT_HEADERS = {
+    "X-CSRF-TOKEN" : document.getElementById('CSRFTOKEN').getAttribute('content'),
+    "X-REQUESTED-WITH" : "XMLHttpRequest"
+};
+
+function getUrl(paths)
+{
+    if (! Array.isArray(paths)) paths = [paths];
+    return BASE + paths.join("/");
+
+}
 
 class APIResource
 {
@@ -16,9 +29,23 @@ class APIResource
      */
     get(paths,query=null)
     {
-        if (! Array.isArray(paths)) paths = [paths];
-        let url = BASE + paths.join("/");
-        return $http.get(url,query);
+        return $http.get(getUrl(paths),{
+            params: query,
+            headers: DEFAULT_HEADERS
+        });
+    }
+
+    /**
+     * Post to the API.
+     * @param paths string|array
+     * @param params object
+     * @returns {Promise}
+     */
+    post(paths,params=null)
+    {
+        return $http.post(getUrl(paths), params, {
+            headers: DEFAULT_HEADERS
+        });
     }
 
     /**
@@ -30,6 +57,19 @@ class APIResource
         return $http.get(BASE).then(response => {
             return response.data.currentUser;
         });
+    }
+
+    /**
+     * Get the CMS state object.
+     * @returns {Promise}
+     */
+    state()
+    {
+        return $http.post("/cms/_state", {}, {
+            headers: DEFAULT_HEADERS
+        }).then(response => {
+            return response.data;
+        })
     }
 
     /**

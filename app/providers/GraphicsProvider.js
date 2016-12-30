@@ -1,13 +1,14 @@
 "use strict";
 
-var Expressway = require('expressway');
+var Provider = require('expressway').Provider;
 var sharp = require('sharp');
+var path = require('path');
 
 /**
  * Provides helper functions for Sharp.
  * @author Mike Adamczyk <mike@bom.us>
  */
-class GraphicsProvider extends Expressway.Provider
+class GraphicsProvider extends Provider
 {
     /**
      * Constructor.
@@ -17,18 +18,19 @@ class GraphicsProvider extends Expressway.Provider
     {
         super(app);
 
-        this.requires('CoreProvider', 'LoggerProvider');
+        this.order = 0;
+
+        app.service('media', app.load(require('../services/MediaService')));
     }
 
     /**
      * Register with the application.
      * @param app Application
+     * @param media MediaService
      */
-    register(app)
+    boot(app,media)
     {
-        let MediaService = require('../services/MediaService');
-
-        let mediaService = new MediaService({
+        media.add({
 
             "original" : function(image,meta) {
                 // We can't be storing giant images on the server.
@@ -48,15 +50,6 @@ class GraphicsProvider extends Expressway.Provider
                 return meta.width < 800 ? false : image.resize(800);
             }
         });
-
-        // Attach an image helper to the view.
-        app.on('view.created', function(view) {
-            view.data.getImage = function(name, size = "original") {
-                return mediaService.url(name,size);
-            }
-        });
-
-        app.register('media', mediaService, "Image manipulation service");
     }
 }
 
