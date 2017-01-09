@@ -20,13 +20,14 @@ class CMSIndexController extends Controller
      * @param response
      * @param next
      * @param view function
-     * @param middleware object
+     * @param cms Extension
      * @returns {View}
      */
     index(request,response,next,view,cms)
     {
         view.template('cms:index');
-        view.title(cms.appName);
+        view.title(cms.title);
+        view.use('logo', cms.logo);
 
         return view;
     }
@@ -38,51 +39,44 @@ class CMSIndexController extends Controller
      * @param response
      * @param next
      */
-    state(request,response,next,currentUser)
+    state(request,response,next,app,currentUser,customGroupRepository,customObjectRepository)
     {
-        return {
-            user : currentUser,
-            // TODO
-            defs : {
-                user: {
-                    title: 'email',
-                    model: "user",
-                    fields: [
-                        {
-                            name: "email",
-                            label: "Email",
-                            type: "email",
-                        },
-                        {
-                            name: "first_name",
-                            label: "First Name",
-                            type: "text",
-                        },
-                        {
-                            name: "last_name",
-                            label: "Last Name",
-                            type: "text",
-                        },
-                    ]
-                },
-                media: {
-                    title:'file_name',
-                    model: "media",
-                    fields: [
-                        {
-                            name: "file_name",
-                            label: "File Name",
-                            type: 'text'
-                        },
-                        {
-                            name: "file_type",
-                            label: "Type",
-                            type: "text"
-                        }
-                    ]
-                }
-            }
-        }
+        let json = {
+            user: currentUser,
+            objects:{},
+            groups: [],
+        };
+
+        app.models.each(model =>
+        {
+            json.objects[model.slug] = {
+                name: model.name,
+                slug: model.slug,
+                title: model.title,
+                icon: model.icon,
+                fields: [],
+            };
+        });
+
+        return customObjectRepository.then(customObjects =>
+        {
+            customObjects.forEach(customObject => {
+                if (!json.objects[customObject.slug]) return;
+
+                json.objects[customObject.slug].fields = customObject.fields.map(field => {
+                    return {
+                        name: field.name,
+                        type: field.type,
+                        label: field.label
+                    }
+                })
+            });
+            return customGroupRepository.then(groups => {
+                json.groups = groups;
+
+                return json;
+            });
+        });
     }
 }
 

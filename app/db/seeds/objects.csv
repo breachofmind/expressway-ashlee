@@ -1,0 +1,6 @@
+name,slug,title,group
+User,user,email,system
+Role,role,name,system
+CustomObject,custom-object,name,system
+CustomField,custom-field,label,system
+Project,project,title,custom-objects

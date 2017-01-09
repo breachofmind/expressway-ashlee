@@ -13,7 +13,6 @@ Vue.use(VueAPI);
 // Components
 Vue.component('icon', require('../vue/icon.vue'));
 Vue.component('modal', require('../vue/modal.vue'));
-Vue.component('remote', require('../vue/remote.vue'));
 Vue.component('snackbar', require('../vue/snackbar.vue'));
 
 

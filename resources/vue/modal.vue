@@ -20,7 +20,7 @@
 
 					<footer class="modal-footer">
 						<div class="button-group align-right">
-							<button v-for="button in buttons" @click.prevent="button.action($cmp,$event)" class="button" :class="button.classes">
+							<button v-for="button in buttons" @click.prevent="button.action($cmp,$event,input)" class="button" :class="button.classes">
 								{{button.label}}
 							</button>
 						</div>
@@ -35,6 +35,20 @@
 	var Vue = require('vue');
 	var Action = require('../js/utils/modal-actions');
 	var ANIMATION_TIMEOUT = 500;
+	var FORMS = {
+	    "new" : function(object) {
+	        return {
+                icon: object.icon,
+                title:"New "+object.name,
+                body:require('./form-new.vue'),
+                options:{model:object},
+                buttons: [
+                    Action.CANCEL,
+                    Action.SUBMIT(object)
+                ]
+            }
+	    }
+	};
 
 	module.exports = {
 		data() {
@@ -61,15 +75,17 @@
 	            return this;
 			}
 		},
+
 		mounted()
 		{
             Vue.prototype.$modal = this;
 		},
+
 		methods: {
 		    open(args) {
 		        this.$emit('open');
 		        this.visible = true;
-		        this.args = args;
+		        this.args = args || {};
 		    },
 	        close($event) {
 	            this.$emit('close', this.input);
@@ -86,11 +102,17 @@
 			{
 			    return this.open({
 			        title: title,
-				    body:'remote',
+				    body: require('../vue/remote.vue'),
 				    options: {url:url}
 			    });
 			},
-			reset() {
+			form(type,objectName)
+			{
+			    var object = this.$store.state.objects[objectName];
+				this.open(FORMS[type] (object));
+			},
+			reset()
+			{
                 this.visible = false;
 	            // Allow the animation to run before resetting.
 	            window.setTimeout(() => {

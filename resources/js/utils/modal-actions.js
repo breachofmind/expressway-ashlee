@@ -12,11 +12,15 @@ exports.CANCEL = {
         return $parent.close($event);
     }
 };
-exports.SUBMIT = {
-    label: "Submit",
-    classes: ['success'],
-    action($parent,$event) {
-        return $parent.submit($event);
+exports.SUBMIT = function(object) {
+    return {
+        label: "Submit",
+        classes: ['success'],
+        action($parent, $event, input) {
+            // api URL
+            var url = "/api/v1/" + object.slug;
+            console.log(input);
+            console.log(url);
+        }
     }
-};
-
+}

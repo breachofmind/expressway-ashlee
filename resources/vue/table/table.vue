@@ -1,9 +1,9 @@
 <template>
-	<div class="ashlee-table-container">
-		<div class="ashlee-table">
-			<header class="ashlee-thead">
-				<div class="ashlee-tr">
-					<div class="ashlee-th" data-col="bulk" v-if="bulk">
+	<div class="al-table-container">
+		<div class="al-table">
+			<header class="al-thead">
+				<div class="al-tr">
+					<div class="al-th al-td-action" data-col="bulk" v-if="bulk">
 						<input type="checkbox" v-model="checkAll" @change="selectAll($event)">
 					</div>
 					<heading v-for="(field,column) in fields"
@@ -11,12 +11,12 @@
 					         :column="column"
 					         :definition="definition">
 					</heading>
-					<div class="ashlee-th" data-col="bulk" v-if="opts"></div>
+					<div class="al-th al-td-action" data-col="bulk" v-if="opts"></div>
 				</div>
 			</header>
 
-			<div class="ashlee-tbody">
-				<div class="ashlee-tr callout primary" v-if="! populated">
+			<div class="al-tbody">
+				<div class="al-tr callout primary" v-if="! populated">
 					No records found.
 				</div>
 				<row v-for="(record,index) in records"
@@ -27,7 +27,7 @@
 				</row>
 			</div>
 
-			<footer class="ashlee-tfoot">
+			<footer class="al-tfoot">
 
 			</footer>
 		</div>
@@ -55,7 +55,7 @@
 		computed: {
 			definition()
 			{
-			    return this.$store.state.loading ? {} :this.$store.state.definitions[this.resource];
+			    return this.$store.state.loading ? {} :this.$store.state.objects[this.resource];
 			},
 			fields()
 			{
@@ -72,6 +72,11 @@
 					return a.concat([]);
 			    }, [])
 			}
+		},
+		watch: {
+	        definition(val) {
+	            this.refresh();
+	        }
 		},
 		methods: {
 			refresh()

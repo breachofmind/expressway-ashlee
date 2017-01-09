@@ -1,13 +1,82 @@
 @extends(layouts/cms)
 
 @section(content)
+<header class="al-layout__header has-header-size row">
 
-<div class="row">
-	<h1>Ashlee</h1>
-	<div class="small-12">
-		<cms-table resource="user" options="{bulk:true}"></cms-table>
+	<div class="al-header__logo align-middle">
+		<img src="{{data.logo}}" alt="logo">
 	</div>
 
+	<div class="al-header__search">
+		<div class="al-input has-icon">
+			<input type="search" class="al-app__search-input">
+			<icon type="search"></icon>
+		</div>
+	</div>
+
+	<div class="al-header__user">
+		<current-user :user="$store.state.currentUser"></current-user>
+	</div>
+
+	<div class="al-header__help">
+		<a href="#/"><icon type="help"></icon></a>
+	</div>
+
+</header>
+
+
+
+<div class="al-layout__main">
+
+	<aside class="al-layout__sidebar">
+		<div class="al-layout__sidebar-header has-header-size">
+
+			<a href="#/" class="al-nav__link">
+				<icon name="action.dashboard"></icon>
+				<span>Dashboard</span>
+			</a>
+		</div>
+
+		<div class="al-nav__groups">
+			<nav-group v-for="group in $store.state.groups" :group="group"></nav-group>
+		</div>
+
+	</aside>
+
+
+
+	<div class="al-layout__body">
+
+		<header class="al-layout__body-header has-header-size row align-middle">
+
+				<div class="al-layout__breadcrumbs small-6">
+					<router-link to="/" class="al-nav__backwards">
+						<icon name="navigation.arrow_back"></icon>
+					</router-link>
+
+					<div class="al-layout__page-title">
+						<icon name="action.class"></icon>
+						<h2>Page Title</h2>
+					</div>
+				</div>
+
+				<div class="al-layout__page-actions small-6 button-group align-right">
+
+					<a href="javascript:;" class="button success al-page-action" @click="$modal.form('new','user')">
+						<icon type="create"></icon>
+						<span>New</span>
+					</a>
+				</div>
+
+		</header>
+
+		<div class="al-layout__page-container">
+			<div class="al-layout__page has-card-shadow">
+				<cms-table :resource="$route.path.replace('/','')" options="{bulk:true}"></cms-table>
+			</div>
+		</div>
+
+	</div>
 </div>
 
 @endsection

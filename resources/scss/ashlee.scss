@@ -1,53 +1,17 @@
 @import 'variables';
+@import 'button';
 @import 'modal';
 @import 'snackbar';
 @import 'icon';
+@import 'table';
+@import 'input';
+@import 'layout';
+@import 'nav';
 
-$table-body-border: 1px solid #efefef;
-$table-head-border: 3px solid #272727;
 
-@mixin table-components($ns:"table")
-{
-	display: flex;
-	flex-direction: column;
 
-	.#{$ns} {
-		&-tr {
-			display:flex;
-			flex-flow:row nowrap;
-			align-content:stretch;
-		}
-		&-thead, &-tbody, &.tfoot {
-			display:block;
-		}
-		&-th, &-td {
-			display:flex;
-			align-items:center;
-			width:100%;
-			padding:8px 10px;
-		}
-		&-tbody .#{$ns}-tr {
-			border-bottom:$table-body-border;
-		}
-		&-thead .#{$ns}-tr {
-			border-bottom:$table-head-border;
-		}
-		&-th[data-col="bulk"],
-		&-td[data-col="bulk"],
-		&-th[data-col="opts"],
-		&-td[data-col="opts"]
-		{
-			flex-basis:100px;
-		}
-	}
-}
-
-.ashlee-table
-{
-	@include table-components(ashlee);
-
-	input {margin:0}
-	.callout {
-		padding:10px; margin:0;
-	}
+.has-card-shadow {
+	background:white;
+	border-radius:$global-radius;
+	box-shadow:1px 1px 2px rgba(black,0.4);
 }

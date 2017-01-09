@@ -1,0 +1,17 @@
+object,label,name,type,priority
+user,Email,email,Email,0
+user,First Name,first_name,String,1
+user,Last Name,last_name,String,2
+role,Name,name,String,0
+role,Description,description,String,1
+custom-object,Name,name,String,0
+custom-object,Slug,slug,Slug,1
+custom-object,Title,title,String,2
+custom-object,Expose,expose,Boolean,3
+custom-field,Label,label,String,0
+custom-field,Name,name,String,2
+custom-field,Type,type,String,3
+custom-field,Object,object,String,1
+project,Title,title,String,0
+project,Type,type,String,1
+project,URL,url,URL,2

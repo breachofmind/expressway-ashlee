@@ -25,10 +25,12 @@ class GraphicsProvider extends Provider
 
     /**
      * Register with the application.
+     * @injectable
+     * @param done Function
      * @param app Application
      * @param media MediaService
      */
-    boot(app,media)
+    boot(done,app,media)
     {
         media.add({
 
@@ -50,6 +52,8 @@ class GraphicsProvider extends Provider
                 return meta.width < 800 ? false : image.resize(800);
             }
         });
+
+        done();
     }
 }
 

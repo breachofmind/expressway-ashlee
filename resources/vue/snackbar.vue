@@ -1,6 +1,6 @@
 <template>
 	<transition name="snackbar">
-		<div id="Ashlee-snackbar" class="snackbar-wrapper" v-show="visible">
+		<div class="snackbar-wrapper" v-show="visible">
 			<div class="snackbar-container" :class="classes">
 
 				<div class="snackbar-message">

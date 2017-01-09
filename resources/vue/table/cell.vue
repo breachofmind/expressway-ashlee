@@ -1,16 +1,19 @@
 <template>
-	<div class="ashlee-td" :data-col="field">
-		<component :is="'_'+field.type" :record="record" :field="field" :definition="definition"></component>
+	<div class="al-td" :data-col="field.name">
+		<component :is="'input_'+field.type" :record="record" :field="field" :definition="definition"></component>
 	</div>
 </template>
 
 <script>
-	module.exports = {
+	var types = ['text','url','email','slug','bool'];
+
+	var component = {
 	    name:"cms-table-cell",
-		props:['record','field','column','definition'],
-		components: {
-	        _text: require('./types/text.vue'),
-	        _email: require('./types/email.vue')
-		}
-	}
+        props:['record','field','column','definition'],
+		components:{}
+	};
+	types.forEach(type => {
+	    component.components["input_"+type] = require('./types/'+type+".vue");
+	});
+	module.exports = component;
 </script>

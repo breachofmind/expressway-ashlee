@@ -3,8 +3,9 @@ var Vuex = require('vuex');
 var store = new Vuex.Store({
     state: {
         loading: true,
-        currentUser: null,
-        definitions: {}
+        currentUser: {},
+        objects: {},
+        groups: {},
     },
     mutations: {
         getState(state, promise)
@@ -12,8 +13,9 @@ var store = new Vuex.Store({
             state.loading = true;
             promise.then(response => {
                 state.loading = false;
-                state.user = response.user;
-                state.definitions = response.defs;
+                state.currentUser = response.user;
+                state.objects = response.objects;
+                state.groups = response.groups;
             });
         }
     }

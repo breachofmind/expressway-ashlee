@@ -1,0 +1,77 @@
+$nav-link-color: lighten($app-sidebar-color,25%);
+$nav-link-icon-color: lighten($app-sidebar-color,30%);
+$nav-link-selected: lighten($app-sidebar-color,20%);
+
+
+.al-nav {
+	&__groups {
+
+	}
+	&__group {
+		border-bottom:1px solid lighten($app-sidebar-color,10%);
+	}
+	&__group-title {
+		color:#95989A;
+		font-size:14px;
+		text-transform:uppercase;
+		padding:10px 10px 5px;
+		margin-bottom:5px;
+	}
+
+	&__backwards {
+		position:absolute;
+		display:block;
+		left:-15px;
+		top:18px;
+		width:30px;
+		height:30px;
+		background:white;
+		text-align:center;
+		border-radius:50%;
+		.al-icon {
+			position:relative;
+			top:3px;
+			svg {fill:$nav-link-selected;}
+		}
+	}
+
+	&__link {
+		position:relative;
+		padding:2px 10px;
+		display:block;
+		width:100%;
+		color: $nav-link-color;
+		&:hover {
+			color:white;
+			.al-icon svg {fill:white;}
+		}
+		.al-icon {
+			display:inline-block;
+			position:relative;
+			top:3px;
+			margin-right:5px;
+			svg {
+				fill: $nav-link-icon-color;
+				height:20px;
+				width:20px;
+			}
+		}
+		&.router-link-active {
+			color:white;
+			background:$nav-link-selected;
+			.al-icon svg {fill:white;}
+		}
+		&.router-link-active:after {
+			content:"";
+			z-index:5;
+			right:-10px;
+			top:5px;
+			position:absolute;
+			display:block;
+			width:20px;
+			height:20px;
+			border-radius:50%;
+			background:$nav-link-selected;
+		}
+	}
+}

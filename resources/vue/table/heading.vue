@@ -1,5 +1,5 @@
 <template>
-	<div class="ashlee-th">
+	<div class="al-th">
 		{{field.label}}
 	</div>
 </template>

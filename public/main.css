@@ -12,11 +12,11 @@
 
 .modal-header .ashlee-icon svg { width: 36px; height: 36px; }
 
-.modal-container.error .modal-header { border-left: 10px solid #cc4b37; border-bottom: 0; background-color: rgba(204, 75, 55, 0.2); }
+.modal-container.alert .modal-header { border-left: 10px solid #cc4b37; border-bottom: 0; background-color: rgba(204, 75, 55, 0.2); }
 
-.modal-container.error .modal-header .ashlee-icon svg { fill: #cc4b37; }
+.modal-container.alert .modal-header .ashlee-icon svg { fill: #cc4b37; }
 
-.modal-container.error .modal-header h3 { color: #cc4b37; }
+.modal-container.alert .modal-header h3 { color: #cc4b37; }
 
 .modal-container.success .modal-header { border-left: 10px solid #3adb76; border-bottom: 0; background-color: rgba(58, 219, 118, 0.2); }
 
@@ -40,7 +40,7 @@
 
 .snackbar-container { margin: 0 auto; border-radius: 3px; height: 70px; width: 100%; max-width: 600px; background: rgba(0, 0, 0, 0.8); box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); padding: 15px; }
 
-.snackbar-message { color: #fefefe; font-size: 20px; }
+.snackbar-message { color: #fefefe; font-size: 16px; }
 
 .snackbar-message .ashlee-icon { position: relative; top: 5px; }
 
@@ -101,3 +101,65 @@
 
 @keyframes loaderWait { 0% { -webkit-transform: scale(1); transform: scale(1); }
   100% { -webkit-transform: scale(1.4); transform: scale(1.4); } }
+
+.ashlee-table { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; }
+
+.ashlee-table .ashlee-tr { display: -webkit-box; display: -ms-flexbox; display: flex; -ms-flex-flow: row nowrap; flex-flow: row nowrap; -ms-flex-line-pack: stretch; align-content: stretch; }
+
+.ashlee-table .ashlee-thead, .ashlee-table .ashlee-tbody, .ashlee-table .ashlee.tfoot { display: block; }
+
+.ashlee-table .ashlee-th, .ashlee-table .ashlee-td { display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-align: center; -ms-flex-align: center; align-items: center; width: 100%; padding: 8px 10px; }
+
+.ashlee-table .ashlee-tbody .ashlee-tr { border-bottom: 1px solid #efefef; }
+
+.ashlee-table .ashlee-thead .ashlee-tr { border-bottom: 3px solid #272727; }
+
+.ashlee-table .ashlee-th[data-col="bulk"], .ashlee-table .ashlee-td[data-col="bulk"], .ashlee-table .ashlee-th[data-col="opts"], .ashlee-table .ashlee-td[data-col="opts"] { -ms-flex-preferred-size: 100px; flex-basis: 100px; }
+
+.ashlee-table input { margin: 0; }
+
+.ashlee-table .callout { padding: 10px; margin: 0; }
+
+.ashlee-app-header { background: #C94343; }
+
+.ashlee-layout { background: #F5F5F5; display: -webkit-box; display: -ms-flexbox; display: flex; }
+
+.ashlee-layout-sidebar { background: #4D4D4D; height: calc(100vh - 70px); -ms-flex-preferred-size: 240px; flex-basis: 240px; }
+
+.ashlee-layout-sidebar-header { padding: 15px 0px; background: #342F2F; }
+
+.ashlee-layout-body { width: 100%; }
+
+.ashlee-layout-page-container { padding: 20px; display: -webkit-box; display: -ms-flexbox; display: flex; -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column; overflow-y: scroll; height: calc(100vh - 140px); }
+
+.ashlee-layout-page { padding: 15px; z-index: 1; }
+
+.ashlee-layout-header { background: white; padding: 18px 15px; z-index: 2; border-bottom: 1px solid #cacaca; }
+
+.ashlee-page-title-icon { display: inline-block; }
+
+.ashlee-page-title h2 { display: inline-block; margin: 0; font-size: 1.5em; }
+
+.card-shadow { background: white; border-radius: 3px; box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4); }
+
+.ashlee-header { height: 70px; }
+
+.ashlee-nav-link { position: relative; padding: 2px 10px; display: block; width: 100%; color: #8d8d8d; }
+
+.ashlee-nav-link:hover { color: white; }
+
+.ashlee-nav-link:hover .ashlee-icon svg { fill: white; }
+
+.ashlee-nav-link .ashlee-icon { display: inline-block; position: relative; top: 3px; margin-right: 5px; }
+
+.ashlee-nav-link .ashlee-icon svg { fill: #9a9a9a; height: 20px; width: 20px; }
+
+.ashlee-nav-link.selected { color: white; background: gray; }
+
+.ashlee-nav-link.selected .ashlee-icon svg { fill: white; }
+
+.ashlee-nav-link.selected:after { content: ""; z-index: 5; right: -10px; top: 5px; position: absolute; display: block; width: 20px; height: 20px; border-radius: 50%; background: gray; }
+
+.ashlee-nav-group { border-bottom: 1px solid #676767; }
+
+.ashlee-nav-group-title { color: #95989A; font-size: 14px; text-transform: uppercase; padding: 10px 10px 5px; margin: 0; }

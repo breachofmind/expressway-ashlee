@@ -1,5 +1,5 @@
 <template>
-	<div class="ashlee-icon">
+	<div class="al-icon">
 		<svg><use :xlink:href="icon"></use></svg>
 	</div>
 </template>
@@ -8,7 +8,11 @@
 	var TYPES = {
 	    success: "action.check_circle",
         alert: "alert.error",
-		warning: "alert.warning"
+		warning: "alert.warning",
+		create: "content.add_box",
+		help: "action.help",
+		logout: "action.exit_to_app",
+		search: "action.search",
 	}
 	module.exports = {
 	    name:"icon",
