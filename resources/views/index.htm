@@ -1,50 +1,30 @@
 @extends(layouts/cms)
 
 @section(content)
-<header class="al-layout__header has-header-size row">
 
-	<div class="al-header__logo align-middle">
-		<img src="{{data.logo}}" alt="logo">
-	</div>
+<transition name="app-loaded" mode="out-in">
+	<div v-if="loaded" class="al-app-loaded" key="app-loaded">
+		<layout-header logo="{{data.logo}}"></layout-header>
 
-	<div class="al-header__search">
-		<div class="al-input has-icon">
-			<input type="search" class="al-app__search-input">
-			<icon type="search"></icon>
+		<div class="al-layout__main">
+
+			<layout-sidebar></layout-sidebar>
+
+			<router-view></router-view>
+
 		</div>
 	</div>
 
-	<div class="al-header__user">
-		<current-user :user="$store.state.currentUser"></current-user>
-	</div>
+	<!-- Loading screen -->
+	<div v-else class="al-loading-screen" key="app-loading">
 
-	<div class="al-header__help">
-		<a href="#/"><icon type="help"></icon></a>
-	</div>
+		<div class="al-loading-screen-icon">
+			<div class="al-loader"><div class="al-loader-object"></div></div>
 
-</header>
-
-
-
-<div class="al-layout__main">
-
-	<aside class="al-layout__sidebar">
-		<div class="al-layout__sidebar-header has-header-size">
-
-			<a href="#/" class="al-nav__link">
-				<icon name="action.dashboard"></icon>
-				<span>Dashboard</span>
-			</a>
+			<p>{{data.randomQuote}}</p>
 		</div>
 
-		<div class="al-nav__groups">
-			<nav-group v-for="group in $store.state.groups" :group="group"></nav-group>
-		</div>
-
-	</aside>
-
-	<router-view></router-view>
-
-</div>
+	</div>
+</transition>
 
 @endsection

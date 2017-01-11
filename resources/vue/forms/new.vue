@@ -38,9 +38,6 @@
                 });
                 return valid;
 		    },
-			test() {
-			    console.log(this.input.test);
-			}
         }
     }
 </script>

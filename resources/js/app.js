@@ -13,12 +13,13 @@ var app = new Vue({
     store,
     router,
     el :"#Ashlee-app",
-    mounted()
+    created()
     {
         this.$store.commit('getState', this.$api.state());
     },
-    components: {
-        'current-user' : require('../vue/current-user.vue'),
-        'nav-group' : require('../vue/nav-group.vue'),
+    computed: {
+        loaded() {
+            return ! this.$store.state.loading;
+        }
     }
 });

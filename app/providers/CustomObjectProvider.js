@@ -36,7 +36,7 @@ class CustomObjectProvider extends Provider
             {
                 if (app.models.has(customObject.name)) {
                     // This is a core model.
-                    customObject.configureModel(app.models.get(customObject.name));
+                    customObject.configureModel(app.models.get(customObject.name), false);
 
                 } else {
                     // This is a custom created model.

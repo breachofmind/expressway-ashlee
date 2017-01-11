@@ -1,4 +1,5 @@
 @import 'variables';
+@import 'loader';
 @import 'button';
 @import 'modal';
 @import 'snackbar';
@@ -8,10 +9,50 @@
 @import 'layout';
 @import 'nav';
 
-
-
 .has-card-shadow {
 	background:white;
 	border-radius:$global-radius;
 	box-shadow:1px 1px 2px rgba(black,0.4);
+}
+
+.al-loading-screen {
+	opacity:1;
+	background:white;
+	position:fixed;
+	top:0; left:0; right:0; bottom:0;
+	p {
+		text-align:center;
+		color:gray;
+		margin-top:15px;
+	}
+}
+
+.al-loading-screen-icon {
+	position:absolute;
+	top:calc(50% - 50px);
+	left:calc(50% - 100px);
+}
+
+.app-loaded {
+	&-enter-active,
+	&-leave-active {
+		transition: opacity 700ms;
+	}
+}
+.al-app-loaded {
+	&.app-loaded-enter {
+		opacity:0;
+	}
+	&.app-loaded-leave {
+		opacity:1;
+	}
+}
+
+.al-loading-screen {
+	&.app-loaded-enter {
+		opacity:1;
+	}
+	&.app-loaded-leave {
+		opacity:0;
+	}
 }

@@ -1,10 +1,13 @@
 $table-body-border: 1px solid #efefef;
 $table-head-border: 3px solid #272727;
+$easeOutExpo: cubic-bezier(0.19, 1, 0.22, 1);
 
 @mixin table-components()
 {
 	display: flex;
 	flex-direction: column;
+	opacity:1;
+	transform: translateY(0px);
 
 	.al-tr {
 		display:flex;
@@ -43,6 +46,25 @@ $table-head-border: 3px solid #272727;
 	}
 }
 
+// Loading animation
+.al-table-container {
+	position:relative;
+	.al-loader {
+		position:absolute;
+		transition:opacity 200ms;
+		opacity:0;
+		top:100px;
+		left:calc(50% - #{$loader-size/4});
+	}
+	&.loading {
+		.al-loader {
+			opacity:1;
+		}
+		.al-table {
+			opacity:0.3;
+		}
+	}
+}
 
 .al-table
 {

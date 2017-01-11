@@ -17,6 +17,9 @@ class CustomField extends Model
         this.title      = 'label';
         this.expose     = true;
         this.managed    = "author";
+        this.icon       = "av.library_books";
+        this.singular   = "Custom Field";
+        this.plural     = "Custom Fields";
     }
 
     /**

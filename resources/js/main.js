@@ -21,6 +21,11 @@ Vue.component('icon', require('../vue/icon.vue'));
 Vue.component('modal', require('../vue/modal.vue'));
 Vue.component('snackbar', require('../vue/snackbar.vue'));
 Vue.component('nav-link', require('../vue/nav-link.vue'));
+Vue.component('layout-sidebar', require('../vue/views/layout/sidebar.vue'));
+Vue.component('layout-header', require('../vue/views/layout/header.vue'));
+Vue.component('layout-body-header', require('../vue/views/layout/body-header.vue'));
+Vue.component('layout-page-container', require('../vue/views/layout/page-container.vue'));
+
 
 // Input components
 var inputTypes = [

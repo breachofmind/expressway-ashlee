@@ -38,6 +38,7 @@ class AshleeCMSExtension extends Extension
             require('expressway/src/middlewares/Development'),
             require('./models/User'),
             require('./models/Role'),
+            require('./models/Media'),
             require('./models/CustomGroup'),
             require('./models/CustomObject'),
             require('./models/CustomField'),

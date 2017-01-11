@@ -19,6 +19,9 @@ class CustomObject extends Model
         this.expose     = true;
         this.populate   = ['fields'];
         this.managed    = "author";
+        this.icon       = "av.library_add";
+        this.singular   = "Custom Object";
+        this.plural     = "Custom Objects";
 
         this.hook(schema => {
             schema.virtual('fields', {
@@ -62,12 +65,16 @@ class CustomObject extends Model
         /**
          * Configure a model with new settings and fields.
          * @param model Model
+         * @param overwriteBaseProps {Boolean}
          */
-        methods.configureModel = function(model)
+        methods.configureModel = function(model, overwriteBaseProps=true)
         {
-            ['expose','group','icon','title','tip'].forEach(property => {
-                model[property] = this[property];
-            });
+            if (overwriteBaseProps) {
+                ['expose','group','icon','title','tip'].forEach(property => {
+                    model[property] = this[property];
+                });
+            }
+
 
             if (this.fields) {
                 this.fields.forEach(customField =>

@@ -1,6 +1,12 @@
 var _   = require('lodash');
 var Model = require('expressway').Model;
 
+const LABELS = {
+    name: "Name",
+    description: "Description",
+    permissions: "Permissions"
+};
+
 class Role extends Model
 {
     constructor(app)
@@ -9,6 +15,7 @@ class Role extends Model
 
         this.title = 'name';
         this.expose = false;
+        this.icon = 'action.lock';
     }
 
     /**
@@ -22,8 +29,8 @@ class Role extends Model
             .timestamps()
             .add('name',        types.Title)
             .add('description', types.Text, 'fillable')
-            .add('permissions', types.StringArray);
-
+            .add('permissions', types.StringArray)
+            .labels(LABELS);
     }
 
     /**

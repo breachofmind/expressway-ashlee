@@ -1,5 +1,5 @@
 <template>
-	<div class="al-table-container">
+	<div class="al-table-container" :class="{loading:loading}">
 		<div class="al-table">
 			<header class="al-thead">
 				<div class="al-tr">
@@ -19,7 +19,7 @@
 				<div class="al-tr callout primary" v-if="! populated && ! loading">
 					No records found.
 				</div>
-				<row v-if="! loading" v-for="(record,index) in records"
+				<row v-show="! loading" v-for="(record,index) in records"
 				     @selected="selectRecord"
 				     :record="record"
 				     :index.number="index"
@@ -31,6 +31,7 @@
 
 			</footer>
 		</div>
+		<div class="al-loader"><div class="al-loader-object"></div></div>
 	</div>
 </template>
 

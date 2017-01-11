@@ -21,7 +21,7 @@
 
 					</div>
 
-					<footer class="modal-footer">
+					<footer class="modal-footer" v-if="buttons.length">
 						<div class="button-group align-right">
 							<button v-for="button in buttons" @click.prevent="button.action($cmp,$event,input)" class="button" :class="button.classes">
 								{{button.label}}
@@ -41,14 +41,11 @@
 	var FORMS = {
 	    "new" : function(object) {
 	        return {
-                icon: object.icon,
-                title:"New "+object.name,
+                icon: "content.add_box",
+                title:"New "+object.singular,
                 body:require('./forms/new.vue'),
                 options:{model:object},
-                buttons: [
-                    Action.CANCEL,
-                    Action.SUBMIT(object)
-                ]
+                buttons: []
             }
 	    }
 	};

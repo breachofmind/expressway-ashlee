@@ -18,6 +18,9 @@ class CustomGroup extends Model
         this.expose     = true;
         this.populate   = ['objects'];
         this.managed    = "author";
+        this.icon       = "image.filter_none";
+        this.singular   = "Custom Group";
+        this.plural     = "Custom Groups";
 
         this.hook(schema => {
             schema.virtual('objects', {

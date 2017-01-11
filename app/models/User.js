@@ -2,11 +2,22 @@
 
 var Model = require('expressway').Model;
 var _     = require('lodash');
-
 var AuthenticationException = require('expressway-auth/src/exceptions/AuthenticationException');
+
+const LABELS = {
+    email: "Email",
+    password: "Password",
+    first_name: "First Name",
+    last_name: "Last Name",
+};
 
 class User extends Model
 {
+    /**
+     * Constructor.
+     * @param app {Application}
+     * @param md5 {Function}
+     */
     constructor(app,md5)
     {
         super(app);
@@ -15,6 +26,7 @@ class User extends Model
         this.expose     = false;
         this.populate   = ['roles'];
         this.managed    = true;
+        this.icon       = 'social.people';
 
         // Create a pre-save hook that encrypts the password.
         this.hook((schema) => {
@@ -26,6 +38,7 @@ class User extends Model
             });
         });
 
+        // Attach the full name of the person and gravatar URL.
         this.on('toJSON', function(json,model,object) {
             json.name = object.name();
             json.imageUrl = "https://www.gravatar.com/avatar/"+md5(object.email.toLowerCase())
@@ -48,7 +61,8 @@ class User extends Model
             .add('last_name',   types.Text,     'required', 'fillable')
             .add('reset_token', types.Text,     'guarded', {default:""})
             .add('failures',    types.Number,   'guarded', {default:0})
-            .add('roles',       types.HasMany('Role'));
+            .add('roles',       types.HasMany('Role'))
+            .labels(LABELS);
     }
 
     /**
