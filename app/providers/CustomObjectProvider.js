@@ -30,20 +30,18 @@ class CustomObjectProvider extends Provider
      */
     boot(next,app,CustomObject,utils,db)
     {
-        CustomObject.all().then((objects) =>
+        CustomObject.all().then((customObjects) =>
         {
-            objects.forEach(customObject =>
+            customObjects.forEach(customObject =>
             {
-                // If we already have this model, allow the user to override settings.
                 if (app.models.has(customObject.name)) {
-                    let model = app.models.get(customObject.name);
-                    ['expose','slug','title','icon'].forEach(property => {
-                        model[property] = customObject[property];
-                    });
+                    // This is a core model.
+                    customObject.configureModel(app.models.get(customObject.name));
 
                 } else {
-                    // Otherwise, create a factory instance of the custom object.
+                    // This is a custom created model.
                     let CustomObjectModel = app.load(require('../services/CustomObjectFactory'), [customObject]);
+
                     app.use(CustomObjectModel);
                 }
 

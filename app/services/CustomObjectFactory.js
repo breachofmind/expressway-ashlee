@@ -14,9 +14,6 @@ module.exports = function(app,customObject)
         {
             super(app);
 
-            this.expose = customObject.expose;
-            this.slug = customObject.slug;
-            this.title = customObject.title;
             this.table = this.table + "__c";
         }
 
@@ -37,28 +34,8 @@ module.exports = function(app,customObject)
         schema(fields,types)
         {
             fields.timestamps();
-            if (! customObject.fields) {
-                return;
-            }
 
-            customObject.fields.forEach(field =>
-            {
-                if (! field.active) return;
-
-                let args = [types[field.type]];
-
-                if (field.hasValidator('required') || field.name == this.title) {
-                    args.push('required');
-                }
-                if (field.hasValidator('unique')) {
-                    args.push('unique');
-                }
-                if (field.hasValidator('guarded')) {
-                    args.push('guarded')
-                }
-
-                fields.add(field.name, args);
-            });
+            customObject.configureModel(this);
         }
     }
 

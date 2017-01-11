@@ -1,10 +1,10 @@
 <template>
-	<a :href="'mailto:'+value">{{value}}</a>
+	<div>{{value}}</div>
 </template>
 
 <script>
 module.exports = {
     mixins: [require('./_mixin')],
-    name: "emailInput",
+    name: "URLInput",
 }
 </script>

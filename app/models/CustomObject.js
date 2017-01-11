@@ -45,22 +45,45 @@ class CustomObject extends Model
             .timestamps()
             .add('name',   types.Title)
             .add('author', types.User)
-            .add('active', types.Boolean)
-            .add('expose', types.Boolean)
-            .add('group',  types.String, 'required', {default:'custom-objects'})
-            .add('icon',   types.String, 'required', {default:"action.class"})
-            .add('title',  types.String, 'required')
-            .add('tip',    types.String);
+            .add('active', types.Boolean, 'fillable')
+            .add('expose', types.Boolean, 'fillable')
+            .add('group',  types.Text, 'required', {default:'custom-objects'}, 'fillable')
+            .add('icon',   types.Text, 'required', {default:"action.class"}, 'fillable')
+            .add('title',  types.Text, 'required', 'fillable')
+            .add('tip',    types.Text, 'fillable');
     }
 
     /**
      * Return the schema methods.
      * @returns {Object}
      */
-    methods(object)
+    methods(methods)
     {
+        /**
+         * Configure a model with new settings and fields.
+         * @param model Model
+         */
+        methods.configureModel = function(model)
+        {
+            ['expose','group','icon','title','tip'].forEach(property => {
+                model[property] = this[property];
+            });
+
+            if (this.fields) {
+                this.fields.forEach(customField =>
+                {
+                    let props = customField.getFieldProperties(model);
+                    if (model.fields.has(customField.name)) {
+                        return model.fields.get(customField.name).use(props);
+                    }
+
+                    return model.fields.add(customField.name, props);
+                })
+            }
+        };
+
         // This assures the base methods are not overwritten.
-        return super.methods(object);
+        return super.methods(methods);
     }
 }
 

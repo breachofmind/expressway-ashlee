@@ -43,40 +43,8 @@
 
 	</aside>
 
+	<router-view></router-view>
 
-
-	<div class="al-layout__body">
-
-		<header class="al-layout__body-header has-header-size row align-middle">
-
-				<div class="al-layout__breadcrumbs small-6">
-					<router-link to="/" class="al-nav__backwards">
-						<icon name="navigation.arrow_back"></icon>
-					</router-link>
-
-					<div class="al-layout__page-title">
-						<icon name="action.class"></icon>
-						<h2>Page Title</h2>
-					</div>
-				</div>
-
-				<div class="al-layout__page-actions small-6 button-group align-right">
-
-					<a href="javascript:;" class="button success al-page-action" @click="$modal.form('new','user')">
-						<icon type="create"></icon>
-						<span>New</span>
-					</a>
-				</div>
-
-		</header>
-
-		<div class="al-layout__page-container">
-			<div class="al-layout__page has-card-shadow">
-				<cms-table :resource="$route.path.replace('/','')" options="{bulk:true}"></cms-table>
-			</div>
-		</div>
-
-	</div>
 </div>
 
 @endsection

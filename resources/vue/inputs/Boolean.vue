@@ -5,7 +5,7 @@
 <script>
 module.exports = {
     mixins: [require('./_mixin')],
-    name: "boolInput",
+    name: "BooleanInput",
 	computed: {
         displayValue() {
             return this.value ? "True" : "False"

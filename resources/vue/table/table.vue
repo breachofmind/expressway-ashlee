@@ -16,10 +16,10 @@
 			</header>
 
 			<div class="al-tbody">
-				<div class="al-tr callout primary" v-if="! populated">
+				<div class="al-tr callout primary" v-if="! populated && ! loading">
 					No records found.
 				</div>
-				<row v-for="(record,index) in records"
+				<row v-if="! loading" v-for="(record,index) in records"
 				     @selected="selectRecord"
 				     :record="record"
 				     :index.number="index"
@@ -35,6 +35,8 @@
 </template>
 
 <script>
+	var LOAD_TIMEOUT = 300;
+
 	module.exports = {
 	    name: "cms-table",
 		props: ['resource','objects','options'],
@@ -55,11 +57,19 @@
 		computed: {
 			definition()
 			{
-			    return this.$store.state.loading ? {} :this.$store.state.objects[this.resource];
+			    if (! this.resource) return {};
+
+			    return this.$store.state.loading ? {} : this.$store.state.objects[this.resource];
 			},
 			fields()
 			{
-			    return this.$store.state.loading ? [] : this.definition.fields;
+                var fields = [];
+			    if (this.$store.state.loading) return fields;
+
+			    this.definition.fields.forEach(function(field) {
+			        if (field.display) fields.push(field);
+			    });
+			    return fields;
 			},
 			populated()
 			{
@@ -81,15 +91,19 @@
 		methods: {
 			refresh()
 			{
+			    if (! this.resource) return;
+
 			    this.loading = true;
                 this.$api.resource(this.resource).then(response =>
                 {
-                    var records = response.data;
-                    // Attach a $selected boolean value to the record.
-                    records.forEach(record => { record.$selected = false });
-                    this.paging = response.pagination;
-                    this.records = records;
-                    this.loading = false;
+                    setTimeout(() => {
+                        var records = response.data;
+                        // Attach a $selected boolean value to the record.
+                        records.forEach(record => { record.$selected = false });
+                        this.paging = response.pagination;
+                        this.records = records;
+                        this.loading = false;
+                    }, LOAD_TIMEOUT)
                 })
 			},
 			selectAll($event)

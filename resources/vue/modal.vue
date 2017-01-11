@@ -3,6 +3,9 @@
 		<div class="modal-mask" v-show="visible">
 			<div class="modal-wrapper" @click.self="close($event)">
 				<div class="modal-container" :class="classes">
+					<a href="javascript:;" class="modal-close-button" @click="close($event)">
+						<icon name="navigation.close"></icon>
+					</a>
 					<header class="modal-header" v-if="args.title">
 						<h3>
 							<icon v-if="args.icon" :name="args.icon"></icon>
@@ -40,7 +43,7 @@
 	        return {
                 icon: object.icon,
                 title:"New "+object.name,
-                body:require('./form-new.vue'),
+                body:require('./forms/new.vue'),
                 options:{model:object},
                 buttons: [
                     Action.CANCEL,

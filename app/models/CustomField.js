@@ -29,16 +29,16 @@ class CustomField extends Model
             .timestamps()
             .add('label',      types.Title)
             .add('author',     types.User)
-            .add('active',     types.Boolean)
-            .add('display',    types.Boolean)
-            .add('object',     types.String, 'required')
-            .add('name',       types.String, 'required')
-            .add('type',       types.String, 'required')
-            .add('priority',   types.Number, {default:0})
+            .add('display',    types.Boolean, 'fillable')
+            .add('fillable',   types.Boolean, 'fillable')
+            .add('object',     types.Text, 'required', 'fillable')
+            .add('name',       types.Text, 'required', 'fillable')
+            .add('type',       types.Text, 'required', 'fillable')
+            .add('priority',   types.Number, {default:0}, 'fillable')
             .add('validators', types.StringArray)
             .add('options',    types.ObjectArray)
             .add('value',      types.Mixed)
-            .add('tip',        types.String)
+            .add('tip',        types.Text, 'fillable')
     }
 
     /**
@@ -55,6 +55,32 @@ class CustomField extends Model
         methods.hasValidator = function(name) {
             return this.validators.indexOf(name) > -1;
         };
+
+        /**
+         * Add this custom field model to a Field instance.
+         * @param model {Model}
+         */
+        methods.getFieldProperties = function(model)
+        {
+            let types = model.fields.types;
+
+            let args = [
+                types[this.type],
+                (this.hasValidator('required') || this.name == model.title ? 'required' : null),
+                (this.hasValidator('unique') ? 'unique' : null),
+                (this.hasValidator('guarded') ? 'guarded' : null),
+                (this.fillable ? 'fillable' : null),
+                (this.display ? 'display' : null),
+                {
+                    label: this.label,
+                    tip: this.tip,
+                    priority: this.priority,
+                }
+            ];
+
+            return args;
+        };
+
         // This assures the base methods are not overwritten.
         return super.methods(methods);
     }

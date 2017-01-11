@@ -41,9 +41,10 @@ class CustomGroup extends Model
         fields
             .slug()
             .timestamps()
+            .add('name',   types.Title)
             .add('author', types.User)
-            .add('active', types.Boolean)
-            .add('name',   types.Title);
+            .add('active', types.Boolean, 'fillable')
+
     }
 
     /**

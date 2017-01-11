@@ -31,7 +31,15 @@ $modal-shadow: 5px 5px 7px rgba(black,0.2) !default;
 	padding:30px;
 }
 
+.modal-close-button {
+	position:absolute;
+	display:block;
+	top:15px;
+	right:15px;
+}
+
 .modal-container {
+	position:relative;
 	max-width: $modal-width;
 	width:100%;
 	margin: 0px auto;

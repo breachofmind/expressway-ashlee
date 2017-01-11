@@ -21,7 +21,7 @@
 		props:['record','index','definition'],
 		computed: {
 	        fields() {
-	            return this.definition.fields;
+	            return this.$parent.fields;
 	        },
 	        isBulk() {
 	            return this.$parent.bulk;

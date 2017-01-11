@@ -3,6 +3,8 @@
 var Model = require('expressway').Model;
 var _     = require('lodash');
 
+var AuthenticationException = require('expressway-auth/src/exceptions/AuthenticationException');
+
 class User extends Model
 {
     constructor(app,md5)
@@ -40,12 +42,12 @@ class User extends Model
     {
         fields
             .timestamps()
-            .add('email',       types.Title,  'unique')
-            .add('first_name',  types.String, 'required')
-            .add('last_name',   types.String, 'required')
-            .add('password',    types.String, 'guarded', 'required')
-            .add('reset_token', types.String, 'guarded', {default:""})
-            .add('failures',    types.Number, 'guarded', {default:0})
+            .add('email',       types.Title, types.Email, 'unique')
+            .add('password',    types.Password)
+            .add('first_name',  types.Text,     'required', 'fillable')
+            .add('last_name',   types.Text,     'required', 'fillable')
+            .add('reset_token', types.Text,     'guarded', {default:""})
+            .add('failures',    types.Number,   'guarded', {default:0})
             .add('roles',       types.HasMany('Role'));
     }
 
@@ -59,7 +61,7 @@ class User extends Model
      */
     methods(object,config,encrypt,gate)
     {
-        let allowed_failures = config('allowed_login_failures', 0);
+        let allowed_failures = config('auth.allowedFailures', 0);
 
         let methods = {
 
@@ -83,14 +85,20 @@ class User extends Model
             /**
              * Authenticate a user who is logging in.
              * @param password string
-             * @throws string
+             * @throws AuthenticationException
              * @returns {boolean}
              */
             authenicate(password)
             {
-                if (this.reset_token !== "") throw("pending_reset");
-                if (allowed_failures && this.failures > allowed_failures) throw("too_many_failures");
-                if (! password) throw("no_password");
+                if (this.reset_token !== "") {
+                    throw new AuthenticationException('pendingReset');
+                }
+                if (allowed_failures && this.failures > allowed_failures) {
+                    throw new AuthenticationException('tooManyFailures');
+                }
+                if (! password) {
+                    throw new AuthenticationException('noPassword');
+                }
 
                 var valid = this.isValid(password);
 
@@ -98,8 +106,10 @@ class User extends Model
                 if (valid === false) {
                     this.failures ++;
                     this.save();
-                    throw ("bad_password");
+                    throw new AuthenticationException('badPassword');
                 }
+
+                // The user was valid after this point.
                 // Reset the failure count.
                 if (this.failures > 0) {
                     this.failures = 0;

@@ -1,10 +1,10 @@
 <template>
-	<div v-html="$value"></div>
+	<div>{{value}}</div>
 </template>
 
 <script>
 module.exports = {
     mixins: [require('./_mixin')],
-    name: "slugInput",
+    name: "SlugInput",
 }
 </script>

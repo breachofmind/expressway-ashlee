@@ -21,7 +21,7 @@ class Role extends Model
         fields
             .timestamps()
             .add('name',        types.Title)
-            .add('description', types.String)
+            .add('description', types.Text, 'fillable')
             .add('permissions', types.StringArray);
 
     }

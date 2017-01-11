@@ -13,8 +13,5 @@
 	module.exports = {
 	    name:"navGroup",
 		props:['group'],
-		components:{
-            'nav-link' : require('./nav-link.vue'),
-		}
 	}
 </script>

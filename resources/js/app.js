@@ -2,9 +2,12 @@ var Vue = require('vue');
 var VueRouter = require('vue-router');
 var store = require('./store');
 
-var routes = {};
-var router = new VueRouter(routes);
-
+var routes = [
+    {path: "/",           component: require('../vue/views/home.vue')},
+    {path: "/:model",     component: require('../vue/views/list.vue')},
+    {path: "/:model/:id", component: require('../vue/views/edit.vue')},
+];
+var router = new VueRouter({routes});
 
 var app = new Vue({
     store,
@@ -15,9 +18,7 @@ var app = new Vue({
         this.$store.commit('getState', this.$api.state());
     },
     components: {
-        'cms-table' : require('../vue/table/table.vue'),
         'current-user' : require('../vue/current-user.vue'),
-        'nav-link' : require('../vue/nav-link.vue'),
         'nav-group' : require('../vue/nav-group.vue'),
     }
 });

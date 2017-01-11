@@ -39,7 +39,7 @@ class CMSIndexController extends Controller
      * @param response
      * @param next
      */
-    state(request,response,next,app,currentUser,customGroupRepository,customObjectRepository)
+    state(request,response,next,app,currentUser,customGroupRepository)
     {
         let json = {
             user: currentUser,
@@ -54,28 +54,16 @@ class CMSIndexController extends Controller
                 slug: model.slug,
                 title: model.title,
                 icon: model.icon,
-                fields: [],
+                fields: model.fields.toArray(),
             };
         });
 
-        return customObjectRepository.then(customObjects =>
-        {
-            customObjects.forEach(customObject => {
-                if (!json.objects[customObject.slug]) return;
-
-                json.objects[customObject.slug].fields = customObject.fields.map(field => {
-                    return {
-                        name: field.name,
-                        type: field.type,
-                        label: field.label
-                    }
-                })
+        return customGroupRepository.then(customGroups => {
+            customGroups.forEach(group => {
+                json.groups.push(group);
             });
-            return customGroupRepository.then(groups => {
-                json.groups = groups;
 
-                return json;
-            });
+            return json;
         });
     }
 }

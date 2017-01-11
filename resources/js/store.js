@@ -6,6 +6,7 @@ var store = new Vuex.Store({
         currentUser: {},
         objects: {},
         groups: {},
+        view: "dashboard"
     },
     mutations: {
         getState(state, promise)
