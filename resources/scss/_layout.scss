@@ -186,4 +186,47 @@ $app-sidebar-basis:240px !default;
 	background:rgba(white,0.3);
 }
 
+// ------------------------------------
+// Loading screen
+// ------------------------------------
+.al-loading-screen {
+	opacity:1;
+	background:white;
+	position:fixed;
+	top:0; left:0; right:0; bottom:0;
+	p {
+		text-align:center;
+		color:gray;
+		margin-top:15px;
+	}
+}
 
+.al-loading-screen-icon {
+	position:absolute;
+	top:calc(50% - #{$loader-size/2});
+	left:calc(50% - #{$loader-size/2});
+}
+
+.app-loaded {
+	&-enter-active,
+	&-leave-active {
+		transition: opacity 700ms;
+	}
+}
+.al-app-loaded {
+	&.app-loaded-enter {
+		opacity:0;
+	}
+	&.app-loaded-leave {
+		opacity:1;
+	}
+}
+
+.al-loading-screen {
+	&.app-loaded-enter {
+		opacity:1;
+	}
+	&.app-loaded-leave {
+		opacity:0;
+	}
+}

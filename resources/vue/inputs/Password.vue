@@ -1,13 +1,22 @@
 <template>
-	<div v-if="editing">
-		<label v-if="editing !== 'inline'" :for="inputId">{{field.label}}</label>
-		<input :id="inputId" v-validate :data-vv-rules="rules" :data-vv-as="field.label" type="password" v-model="record[field.name]" :name="field.name">
-		<p v-show="v_errors.has(field.name)" class="al-input-error">
-			{{ v_errors.first(field.name) }}
-		</p>
+	<div v-if="editing" class="al-input-group" :class="inputGroupClasses">
+		<div class="al-input-label" v-if="! inline">
+			<label :for="inputId">{{field.label}}</label>
+		</div>
+		<div class="al-input-field">
+			<input
+					:id="inputId"
+					:class="inputClasses"
+					v-model="record[field.name]"
+					:required="field.required"
+					:name="field.name"
+					type="password"
+			>
+		</div>
 	</div>
+
 	<div v-else>
-		***
+		<span>***</span>
 	</div>
 </template>
 
@@ -23,11 +32,6 @@ module.exports = {
         value() {
             return "";
         }
-	},
-	created() {
-        this.validationRules.push('regex:'+PASSWORD_REGEX);
-        this.validationRules.push('min:'+PASSWORD_MIN);
-        this.validationRules.push('max:'+PASSWORD_MAX);
 	}
 }
 </script>

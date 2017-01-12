@@ -13,7 +13,11 @@
 		help: "action.help",
 		logout: "action.exit_to_app",
 		search: "action.search",
-	}
+		loader: "navigation.more_horiz",
+		menu: "navigation.more_horiz",
+		link: "content.link",
+		delete: "action.delete",
+	};
 	module.exports = {
 	    name:"icon",
 	    props: ['name','type'],

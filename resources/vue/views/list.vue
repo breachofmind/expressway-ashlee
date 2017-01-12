@@ -13,7 +13,7 @@
 
 		<layout-page-container>
 			<div class="al-layout__page has-card-shadow">
-				<cms-table :resource="model.slug" options="{bulk:true}"></cms-table>
+				<cms-table :resource="model.slug"></cms-table>
 			</div>
 		</layout-page-container>
 
@@ -24,9 +24,6 @@
     module.exports = {
 		computed: {
 		    model() {
-		        if (this.$store.state.loading) {
-		            return {};
-		        }
                 return this.$store.state.objects[this.$route.params.model];
 		    }
 		},

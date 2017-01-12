@@ -30,7 +30,7 @@ $button-icon-size: map-get($button-sizes,default) !default;
 		fill:color-pick-contrast(get-color(secondary));
 	}
 	&.success .al-icon svg {
-		fill:color-pick-contrast(get-color(success));
+		fill:white;
 	}
 
 	&.loader {
@@ -41,11 +41,6 @@ $button-icon-size: map-get($button-sizes,default) !default;
 			animation:loading 400ms linear infinite;
 		}
 	}
-	&[disabled].loader {
-		.al-icon {
-			animation:none;
-		}
-	}
 }
 
 .al-icon.loading {
@@ -54,6 +49,17 @@ $button-icon-size: map-get($button-sizes,default) !default;
 
 .loading-icon {
 	text-align:center;
+}
+
+a {
+	.al-icon.is-inline {
+		position:relative;
+		top:4px;
+		svg {fill:$primary-color;}
+	}
+	&:hover, &:focus {
+		.al-icon.is-inline svg {fill:darken($primary-color,10%)}
+	}
 }
 
 @keyframes loading

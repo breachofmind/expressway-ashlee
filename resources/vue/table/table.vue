@@ -3,27 +3,34 @@
 		<div class="al-table">
 			<header class="al-thead">
 				<div class="al-tr">
-					<div class="al-th al-td-action" data-col="bulk" v-if="bulk">
+					<div class="al-th al-td-action" data-col="bulk" v-if="options.bulk">
 						<input type="checkbox" v-model="checkAll" @change="selectAll($event)">
 					</div>
+
 					<heading v-for="(field,column) in fields"
 					         :field="field"
 					         :column="column"
-					         :definition="definition">
+					         :definition="model"
+					         @sort="fetchData()"
+					>
 					</heading>
-					<div class="al-th al-td-action" data-col="bulk" v-if="opts"></div>
+
+					<div class="al-th al-td-action" data-col="menu" v-if="options.menu"></div>
+
 				</div>
 			</header>
 
 			<div class="al-tbody">
-				<div class="al-tr callout primary" v-if="! populated && ! loading">
-					No records found.
+
+				<div class="al-tr al-table-empty" v-if="! populated && ! loading">
+					<span>No records found.</span>
 				</div>
+
 				<row v-show="! loading" v-for="(record,index) in records"
-				     @selected="selectRecord"
+				     @selected="selectRecord(record,index)"
 				     :record="record"
 				     :index.number="index"
-				     :definition="definition">
+				     :definition="model">
 				</row>
 			</div>
 
@@ -31,92 +38,171 @@
 
 			</footer>
 		</div>
+
 		<div class="al-loader"><div class="al-loader-object"></div></div>
 	</div>
 </template>
 
 <script>
-	var LOAD_TIMEOUT = 300;
+	var REFRESH_TIMEOUT = 300;
 
 	module.exports = {
-	    name: "cms-table",
-		props: ['resource','objects','options'],
+	    name: "CMSTable",
+		props: {
+	        // The model slug.
+	        "resource": {
+	            type: String,
+		        required: true,
+	        },
+			// Records to use.
+			// Keep empty to return a list from the server.
+	        "objects": {
+	            type: [Array,Boolean],
+		        default() {
+	                return false;
+		        }
+	        },
+			// Options for the table.
+			"options": {
+	            type: Object,
+				default() {
+	                return {
+	                    bulk: true,
+                        menu: true,
+	                }
+				}
+			}
+		},
+
 		data() {
 		    return {
-		        bulk: this.options.bulk || true,
-		        opts: this.options.opts || true,
 		        paging: {},
+                searchParams: {
+		            where: {},
+		            sort: {}
+			    },
 			    records: [],
 		        loading: true,
 			    checkAll: false,
 		    }
 		},
+
+		/**
+		 * Add a default search parameter.
+		 */
+		created()
+		{
+            this.searchParams.sort[this.model.title] = 1;
+
+            this.$store.subscribe((mutation, state) => {
+                // If a form is saved with this table around, this table will refresh.
+                if (mutation.type == 'tableUpdate' && mutation.payload == this.model.slug) {
+                    this.fetchData();
+                }
+            });
+		},
+        /**
+         * Refresh the table when mounted.
+         * Use the given records or retrieve the records from the server.
+         * @returns void
+         */
 		mounted()
 		{
-		    if (! this.objects) this.refresh();
-		},
-		computed: {
-			definition()
-			{
-			    if (! this.resource) return {};
 
-			    return this.$store.state.loading ? {} : this.$store.state.objects[this.resource];
+		    if (this.objects === false) {
+		        return this.fetchData();
+            }
+            return this.records = this.objects;
+		},
+
+		computed: {
+            /**
+             * Return the model object given the resource slug.
+             * @returns {Object}
+             */
+			model()
+			{
+				return this.$store.state.objects[this.resource];
 			},
+			/**
+			 * Get the displayed fields for the table resource.
+			 * @returns {Array}
+			 */
 			fields()
 			{
-                var fields = [];
-			    if (this.$store.state.loading) return fields;
-
-			    this.definition.fields.forEach(function(field) {
-			        if (field.display) fields.push(field);
-			    });
-			    return fields;
+                return this.model.getFields('display');
 			},
+			/**
+			 * Check if the table is not loading and is populated with records.
+			 * @returns {Boolean}
+			 */
 			populated()
 			{
-			    return ! this.loading && this.records.length;
+			    return this.records.length > 0;
 			},
+			/**
+			 * Get the selected records.
+			 * @returns {Array}
+			 */
 			selected()
 			{
 			    return this.records.reduce((a,b) => {
 					if (b.$selected) return a.concat(b);
 					return a.concat([]);
 			    }, [])
-			}
+			},
 		},
 		watch: {
-	        definition(val) {
-	            this.refresh();
+			/**
+			 * When the model changes, refresh the table.
+			 */
+	        model() {
+	            this.searchParams = {where:{}, sort:{[this.model.title]: 1}};
+	            this.fetchData();
 	        }
 		},
-		methods: {
-			refresh()
-			{
-			    if (! this.resource) return;
 
+		methods: {
+            /**
+             * Refresh the table records.
+             * @returns void
+             */
+			fetchData()
+			{
+			    this.checkAll = false;
 			    this.loading = true;
-                this.$api.resource(this.resource).then(response =>
-                {
+			    this.$api.search(this.resource,this.searchParams).then(response => {
+                    // Attach a $selected boolean value to the record.
+                    response.data.forEach(record => { record.$selected = false });
+
                     setTimeout(() => {
-                        var records = response.data;
-                        // Attach a $selected boolean value to the record.
-                        records.forEach(record => { record.$selected = false });
                         this.paging = response.pagination;
-                        this.records = records;
+                        this.records = response.data;
                         this.loading = false;
-                    }, LOAD_TIMEOUT)
-                })
+
+                    }, REFRESH_TIMEOUT)
+			    });
 			},
+
+            /**
+             * Select or unselect all records based on the checkAll value.
+             * @param $event Event
+             * @returns {*}
+             */
 			selectAll($event)
 			{
                 return this.records.forEach((record,index) => {
                     record.$selected = this.checkAll;
                 });
-
 			},
-			selectRecord(record)
+            /**
+             * What to do when a record is selected.
+             * @param record Object
+             * @param index Number
+             */
+			selectRecord(record,index)
 			{
-			    //
+			    console.log(record,index);
 			}
 		},
 		components:{

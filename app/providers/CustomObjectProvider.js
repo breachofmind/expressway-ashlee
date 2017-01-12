@@ -56,12 +56,12 @@ class CustomObjectProvider extends Provider
 
 function customGroupRepository(request,response,next,CustomGroup)
 {
-    return CustomGroup.find({active:true}).exec();
+    return CustomGroup.all({active:true});
 }
 
 function customObjectRepository(request,response,next,CustomObject)
 {
-    return CustomObject.find({active:true}).exec();
+    return CustomObject.all({active:true});
 }
 
 module.exports = CustomObjectProvider;

@@ -1,13 +1,13 @@
 $loader-speed: 1200ms !default;
-$loader-size: 200px !default;
+$loader-size: 50px !default;
 
 .al-loader {
 	margin: auto;
 	display: block;
 	width: $loader-size;
 	.al-loader-object {
-		width: $loader-size/4;
-		height: $loader-size/4;
+		width: $loader-size;
+		height: $loader-size;
 		border-radius: 50%;
 		display: block;
 		position: relative;
@@ -50,8 +50,6 @@ $loader-size: 200px !default;
 		left: -3px;
 	}
 }
-
-
 
 @keyframes cssload-flower-fan {
 	0%	 { transform: rotate(0deg); }

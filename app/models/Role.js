@@ -16,6 +16,7 @@ class Role extends Model
         this.title = 'name';
         this.expose = false;
         this.icon = 'action.lock';
+        this.sort = -1;
     }
 
     /**

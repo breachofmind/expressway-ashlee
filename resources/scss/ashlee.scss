@@ -15,44 +15,36 @@
 	box-shadow:1px 1px 2px rgba(black,0.4);
 }
 
-.al-loading-screen {
-	opacity:1;
-	background:white;
-	position:fixed;
-	top:0; left:0; right:0; bottom:0;
-	p {
-		text-align:center;
-		color:gray;
-		margin-top:15px;
-	}
-}
-
-.al-loading-screen-icon {
-	position:absolute;
-	top:calc(50% - 50px);
-	left:calc(50% - 100px);
-}
-
-.app-loaded {
-	&-enter-active,
-	&-leave-active {
-		transition: opacity 700ms;
-	}
-}
-.al-app-loaded {
-	&.app-loaded-enter {
-		opacity:0;
-	}
-	&.app-loaded-leave {
-		opacity:1;
-	}
-}
-
-.al-loading-screen {
-	&.app-loaded-enter {
-		opacity:1;
-	}
-	&.app-loaded-leave {
-		opacity:0;
+.al-dropdown {
+	position:relative;
+	&__container {
+		position:absolute;
+		top:100%;
+		right:0;
+		min-width:120px;
+		max-width:300px;
+		z-index:5;
+		list-style: none;
+		margin:0;
+		background:white;
+		border:1px solid lightgray;
+		>a,>div {
+			color:$black;
+			width:100%;
+			display:block;
+			padding:3px 8px;
+			border-bottom: 1px solid lightgray;
+		}
+		>a .al-icon {
+			position:relative;
+			top:4px;
+		}
+		>a:hover, >a:focus {
+			background: #efefef;
+		}
+		>a.is-danger {
+			color:$alert-color;
+			.al-icon svg {fill: $alert-color;}
+		}
 	}
 }

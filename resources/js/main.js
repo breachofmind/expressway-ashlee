@@ -4,23 +4,18 @@ require('../scss/ashlee.scss');
 var Vue         = require('vue');
 var VueRouter   = require('vue-router');
 var Vuex        = require('vuex');
-var VeeValidate = require('vee-validate');
 var VueAPI      = require('./api');
 
 Vue.use(VueRouter);
 Vue.use(Vuex);
 Vue.use(VueAPI);
-Vue.use(VeeValidate, {
-    errorBagName: 'v_errors',
-    fieldsBagName: 'v_fields',
-    delay:100,
-});
 
 // Components
 Vue.component('icon', require('../vue/icon.vue'));
 Vue.component('modal', require('../vue/modal.vue'));
 Vue.component('snackbar', require('../vue/snackbar.vue'));
 Vue.component('nav-link', require('../vue/nav-link.vue'));
+Vue.component('dropdown-menu', require('../vue/dropdown-menu.vue'));
 Vue.component('layout-sidebar', require('../vue/views/layout/sidebar.vue'));
 Vue.component('layout-header', require('../vue/views/layout/header.vue'));
 Vue.component('layout-body-header', require('../vue/views/layout/body-header.vue'));

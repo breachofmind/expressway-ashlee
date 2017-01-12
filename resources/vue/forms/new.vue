@@ -1,19 +1,34 @@
 <template>
-	<form class="al-form__new">
-		<div class="input-component" v-for="field in fields">
-			<component :is="'Input'+field.typeName" :record="input" :field="field" :definition="model" :editing="true"></component>
+	<form class="al-form__new" method="POST">
+
+		<component
+				:is="'Input'+field.typeName"
+				:record="input" :field="field"
+				:definition="model"
+				:editing="true"
+				@change="dirty=true"
+				v-for="field in fields">
+		</component>
+
+		<div class="al-form__actions">
+			<button class="button success has-icon loader" :disabled="submitting" :class="{loading:submitting}" @click.prevent="submit($event)">
+				<icon type="loader"></icon>
+				<span>Create</span>
+			</button>
 		</div>
-		<button class="button" :disabled="false">Submit</button>
+
 	</form>
 </template>
 
 <script>
+    var SUBMIT_TIMEOUT = 800;
 	module.exports = {
 		name: "FormNew",
         props:['options','input'],
 		data: function() {
 		    return {
-		        formFields: []
+		        submitting: false,
+			    dirty: false,
 		    }
 		},
 		computed: {
@@ -21,23 +36,28 @@
 		        return this.options.model;
 		    },
 			fields() {
-		        var fields = [];
-		        this.model.fields.forEach(field => {
-		            if (field.fillable) fields.push(field);
-		        });
-				return fields;
+		        return this.model.getFields('fillable');
 			},
 		},
         methods: {
-		    validate() {
-                var valid = true;
-                this.formFields.forEach(component => {
-                    if (! component.v_fields || ! valid) return;
-                    var validator = component.v_fields.fields[component.field.name];
-                    if (validator && ! validator.valid) valid = false;
-                });
-                return valid;
-		    },
+			submit($event)
+			{
+			    this.submitting = true;
+			    this.$api.post(this.model.slug, this.input).then(response => {
+			        setTimeout(() => {
+                        this.$snack.success(this.model.singular+" created.");
+                        this.$modal.close();
+                        this.submitting = false;
+                        this.$store.commit('formSaved', {
+                            model: this.model,
+	                        input: this.input
+                        });
+                        this.$store.commit('tableUpdate', this.model.slug);
+
+			        }, SUBMIT_TIMEOUT)
+
+			    });
+			}
         }
     }
 </script>

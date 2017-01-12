@@ -45,22 +45,23 @@ class CMSIndexController extends Controller
     {
         let json = {
             user: currentUser,
-            objects:{},
+            objects:[],
             groups: [],
         };
 
         app.models.each(model =>
         {
-            json.objects[model.slug] = model.toJSON();
+            json.objects.push(model.toJSON());
         });
 
+        // Get the custom model groups.
         return customGroupRepository.then(customGroups =>
         {
-            customGroups.forEach(group => {
-                let objects = group.objects.map(customObject => {
+            customGroups.forEach(group =>
+            {
+                group.objects = group.objects.map(customObject => {
                     return customObject.slug;
                 });
-                group.objects = objects;
                 json.groups.push(group);
             });
 

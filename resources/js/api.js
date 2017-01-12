@@ -49,6 +49,31 @@ class APIResource
     }
 
     /**
+     * Delete a record.
+     * @param paths string|array
+     * @returns {*}
+     */
+    delete(paths)
+    {
+        return $http.delete(getUrl(paths), null, {
+            headers: DEFAULT_HEADERS
+        });
+    }
+
+    /**
+     * Perform a resource search.
+     * @param slug string
+     * @param params
+     * @returns {Promise<R>|Promise.<TResult>|Promise<R2|R1>}
+     */
+    search(slug,params=null)
+    {
+        return this.post([slug,'search'], params).then(response => {
+            return response.data;
+        })
+    }
+
+    /**
      * Get the current user.
      * @returns {*|Promise.<TResult>|Promise<R>|Promise<R2|R1>}
      */
@@ -74,13 +99,13 @@ class APIResource
 
     /**
      * Get a resource by name or id.
-     * @param name string
+     * @param slug string
      * @param id
      * @returns {*|Promise.<TResult>|Promise<R>|Promise<R2|R1>}
      */
-    resource(name,id=null)
+    resource(slug,id=null)
     {
-        let args = id ? [name.toLowerCase(),id] : [name.toLowerCase()];
+        let args = id ? [slug,id] : [slug];
         return this.get(args).then(response => {
             return response.data;
         }, this.errorHandler('Error getting resource '+args.join("/")));

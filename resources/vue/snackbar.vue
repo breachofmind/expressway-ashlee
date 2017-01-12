@@ -65,6 +65,10 @@
 			    return this.open(message,'alert');
 			},
 
+			success(message) {
+	            return this.open(message,'success');
+			},
+
             /**
              * Close the snackbar.
              * @returns void

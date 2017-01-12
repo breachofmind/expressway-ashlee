@@ -43,6 +43,7 @@ $easeOutExpo: cubic-bezier(0.19, 1, 0.22, 1);
 	.al-td-action {
 		flex-shrink:0;
 		flex-basis:45px;
+		overflow:visible;
 	}
 }
 
@@ -72,7 +73,40 @@ $easeOutExpo: cubic-bezier(0.19, 1, 0.22, 1);
 
 	input {margin:0}
 
-	.callout {
-		padding:10px; margin:0;
+	.al-table-empty {
+		background:#efefef;
+		color:gray;
+		padding:10px; margin:15px;
+		justify-content: center;
+	}
+	.al-th a {
+		color:$black;
+		&:hover {
+			text-decoration:underline;
+		}
+	}
+
+	.al-th.is-sorting {
+		a {
+			font-weight:700;
+			position:relative;
+		}
+		a:after {
+			display:block;
+			position:absolute;
+			top:4px;
+			right:-15px;
+			font-size:12px;
+		}
+		&.is-sorting-asc {
+			a:after {
+				content:"\25B2";
+			}
+		}
+		&.is-sorting-desc {
+			a:after {
+				content:"\25BC";
+			}
+		}
 	}
 }

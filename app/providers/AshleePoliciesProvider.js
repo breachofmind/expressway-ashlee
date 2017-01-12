@@ -24,10 +24,26 @@ class AshleePoliciesProvider extends Provider
              * @param model object
              * @returns {boolean}
              */
-            before(user,ability,model) {
+            before(user,ability,model)
+            {
+                // Sorry, can't delete the superuser.
+                if (this.ref.name == 'User' && ability == 'delete' && model.is('superuser')) {
+                    return false;
+                }
+                // Sorry, can't delete yourself.
+                if (this.ref.name == 'User' && ability == 'delete' && user.id == model.id) {
+                    return false;
+                }
+                // Sorry, can't delete the superuser role.
+                if (this.ref.name == 'Role' && ability == 'delete' && model.name == 'superuser') {
+                    return false;
+                }
+                // Superuser can do anything.
                 if (user.is('superuser') || user.hasPermission('superuser')) {
                     return true;
-                } else if (user.hasPermission(`${this.ref.name}.all`)) {
+                }
+                // User's with the Model.all permission can do anything in this model.
+                if (user.hasPermission(`${this.ref.name}.all`)) {
                     return true;
                 }
             }
@@ -43,7 +59,8 @@ class AshleePoliciesProvider extends Provider
              * @param model object
              * @returns {*|boolean}
              */
-            ModelPolicy.prototype[method] = function(user,ability,model) {
+            ModelPolicy.prototype[method] = function(user,ability,model)
+            {
                 return user.hasPermission(`${this.ref.name}.${ability}`);
             }
         });
@@ -55,12 +72,15 @@ class AshleePoliciesProvider extends Provider
          * @param model object
          * @returns {*}
          */
-        ModelPolicy.prototype.manage = function(user,ability,model)
+        ModelPolicy.prototype['manage'] = function(user,ability,model)
         {
             // Return true by default.
             let allow = true;
 
-            if (this.ref.managed) {
+            // In a managed model, the managed property id
+            // needs to match the user id.
+            if (this.ref.managed)
+            {
                 allow = user.hasPermission(`${this.ref.name}.${ability}`);
                 if (model) {
                     let value = model[this.ref.managed];

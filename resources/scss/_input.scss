@@ -14,3 +14,30 @@
 		svg {fill:black;}
 	}
 }
+
+.al-input-group {
+	display:flex;
+	margin-bottom: 10px;
+
+	&.is-required {
+		label:after {
+			content:" *";
+			color:red;
+		}
+	}
+	&.is-title {
+		input{font-weight:700;}
+	}
+}
+.al-input-label {
+	flex-basis: 120px;
+	flex-shrink:0;
+}
+.al-input-field {
+	width:100%;
+	input {margin:0;}
+}
+
+.al-form__actions {
+	text-align:right;
+}
