@@ -181,23 +181,37 @@ class User extends Model
             /**
              * Check if a user can perform an action.
              * @param ability string
-             * @param object string|Model
-             * @returns {boolean}
+             * @param object *
+             * @returns {Boolean}
              */
             can(ability,object)
             {
-                return gate.allows(this,ability,object);
+                return this.allowed(ability,object).passed;
             },
 
             /**
              * Alias of can()
              * @param ability string
-             * @param object string|Model
-             * @returns {boolean}
+             * @param object *
+             * @returns {Boolean}
              */
             cannot(ability,object)
             {
-                return ! this.can(ability,object);
+                return this.allowed(ability,object).failed;
+            },
+
+            /**
+             * Check if a user can perform an action, but return the test results.
+             * @param ability string|array
+             * @param object *
+             * @returns {PolicyTest}
+             */
+            allowed(ability,object)
+            {
+                if (Array.isArray(ability)) {
+                    ability = ability.join(".");
+                }
+                return gate.allows(this,ability,object);
             }
         };
 
