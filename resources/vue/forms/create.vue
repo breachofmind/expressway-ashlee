@@ -23,7 +23,7 @@
 <script>
     var SUBMIT_TIMEOUT = 800;
 	module.exports = {
-		name: "FormNew",
+		name: "CreateForm",
         props:['options','input'],
 		data: function() {
 		    return {
@@ -56,7 +56,7 @@
 
 			        }, SUBMIT_TIMEOUT)
 
-			    });
+			    }).catch(this.$api.errorHandler());
 			}
         }
     }

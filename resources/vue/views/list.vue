@@ -1,9 +1,9 @@
 <template>
 	<div class="al-layout__body">
 
-		<layout-body-header :title="model.plural" :icon="model.icon">
+		<layout-body-header :title="model.plural" :icon="model.icon" :to="'/'+model.slug">
 			<template slot="actions">
-				<a href="javascript:;" class="button success al-page-action" @click="$modal.form('new', model.slug)">
+				<a href="javascript:;" class="button success has-icon" @click="$modal.form('new', model.slug)">
 					<icon type="create"></icon>
 					<span>New</span>
 				</a>
@@ -22,6 +22,7 @@
 
 <script>
     module.exports = {
+        name:"ListView",
 		computed: {
 		    model() {
                 return this.$store.state.objects[this.$route.params.model];

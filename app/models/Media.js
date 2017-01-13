@@ -11,7 +11,7 @@ const LABELS = {
 
 class Media extends Model
 {
-    constructor(app)
+    constructor(app,media)
     {
         super(app);
 
@@ -22,6 +22,11 @@ class Media extends Model
         this.group    = "system";
         this.managed  = "author";
         this.icon     = "image.photo_library";
+
+        // Attach the media thumbnail as the preview field.
+        this.on('toJSON', function(json,model,object) {
+            json.$preview = media.url(object.file_name, 'thumb', model.noImage);
+        });
     }
 
     schema(fields, types)
@@ -29,7 +34,7 @@ class Media extends Model
         fields
             .timestamps()
             .add('title',     types.Title)
-            .add('author',    types.User)
+            .add('author',    types.User, {required:false})
             .add('file_name', types.Text, 'required', 'display', 'fillable')
             .add('file_type', types.Text, 'required', 'display', 'fillable')
             .add('alt_text',  types.Text, 'fillable')

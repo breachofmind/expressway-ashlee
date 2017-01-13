@@ -13,11 +13,21 @@ class RolePolicy extends ModelPolicy
     {
         switch(ability)
         {
-            case 'update' :
+            // Don't allow the user to
+            // delete the superuser role.
             case 'delete' :
                 if (role && role.name == 'superuser') {
+                    return test.fail('auth.gate_canNotDeleteObject', [this.model.singular, role.name]);
+                }
+                break;
 
-                    return test.fail('auth.gate_canNotModifyObject', [this.model.singular, role.name]);
+            // Do not allow user to change
+            // the name of the superuser title.
+            case 'update' :
+                if (role && role.update.hasOwnProperty('name')) {
+                    if (role.object.name == 'superuser' && role.update.name !== 'superuser') {
+                        return test.fail('auth.gate_canNotModifyObject', [this.model.singular, role.object.name]);
+                    }
                 }
                 break;
         }

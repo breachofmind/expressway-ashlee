@@ -3,6 +3,7 @@
 var Provider = require('expressway').Provider;
 var sharp = require('sharp');
 var path = require('path');
+var Promise = require('expressway').Promise;
 
 /**
  * Provides helper functions for Sharp.
@@ -32,6 +33,8 @@ class GraphicsProvider extends Provider
      */
     boot(done,app,media)
     {
+        app.call(this,'mediaImportCommand');
+
         media.add({
 
             "original" : function(image,meta) {
@@ -54,6 +57,53 @@ class GraphicsProvider extends Provider
         });
 
         done();
+    }
+
+    /**
+     * Command to import media.
+     * @param app
+     * @param cli
+     * @param media
+     * @param paths
+     */
+    mediaImportCommand(app,cli,media,paths,log,utils,Media)
+    {
+        cli.command('import [options]', "Import all media from a directory")
+            .option('-p, --path', "The path to import")
+            .option('-s, --save', "Save to the database as Media objects")
+            .action((env,opts) => {
+                let timer = utils.timer();
+                let path = paths.build.root(opts.path || 'import');
+                let save = Boolean(opts.save);
+
+                path.glob().then(images =>
+                {
+                    log.info('found %s images', images.length);
+
+                    let promises = images.map(image => {
+                        return new Promise(resolve => {
+                            media.upload(image).then(sizes => {
+                                Media.create({
+                                    file_name: sizes[0].basename,
+                                    file_type: "image/"+sizes[0].format,
+                                    title: sizes[0].basename
+                                }).then(result => {
+                                    resolve();
+                                })
+                            });
+                        })
+
+                    });
+
+                    Promise.all(promises).then(result => {
+                        log.info('import finished in %s', timer.lap());
+                        process.exit();
+                    })
+
+                });
+
+
+            })
     }
 }
 

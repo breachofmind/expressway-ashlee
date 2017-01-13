@@ -3,6 +3,11 @@
 		<div class="al-td al-td-action" data-col="bulk" v-if="$parent.options.bulk">
 			<input type="checkbox" v-model="record.$selected" @change="$emit('selected',record)">
 		</div>
+		<div class="al-td al-td-preview" data-col="preview" v-if="$parent.showPreview">
+			<router-link :to="link">
+				<img :src="preview" alt="Preview"/>
+			</router-link>
+		</div>
 		<cell v-for="(field,column) in fields"
 		      :record="record"
 		      :field="field"
@@ -31,6 +36,12 @@
 	        isBulk() {
 	            return this.$parent.bulk;
 	        },
+			link() {
+			    return "/"+[this.definition.slug,this.record.id].join("/");
+			},
+			preview() {
+			    return this.record.$preview || this.definition.noImage;
+			}
 		},
 		methods: {
 		    deleteRecord()
@@ -45,10 +56,7 @@
 		            });
 		            this.$store.commit('tableUpdate', this.definition.slug);
 
-		        }).catch(err => {
-		            var response = err.response.data;
-		            this.$snack.alert(response.error.message);
-		        });
+		        }).catch(this.$api.errorHandler());
 		    }
 		},
 		components: {

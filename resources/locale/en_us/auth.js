@@ -22,6 +22,7 @@ module.exports = {
     gate_can_all:"You have permission to do anything for {0}.",
     gate_is_superuser:"You're the superuser!",
     gate_canNotModifyObject:"You're not permitted to modify the {0} '{1}'.",
+    gate_canNotDeleteObject:"You're not permitted to delete the {0} '{1}'.",
     gate_cannot_create:"You don't have permission to create {0}.",
     gate_cannot_read:"You don't have permission to view {0}.",
     gate_cannot_update:"You don't have permission to update {0}.",

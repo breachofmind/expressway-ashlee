@@ -22,6 +22,7 @@ class CustomObject extends Model
         this.icon       = "av.library_add";
         this.singular   = "Custom Object";
         this.plural     = "Custom Objects";
+        this.noImage    = null;
 
         this.hook(schema => {
             schema.virtual('fields', {

@@ -72,7 +72,7 @@ module.exports = function(app,url,paths,log,debug)
 
             for(index; index < this.degradation.length; index++) {
 
-                let file = paths.obj.uploads(this.degradation[index]+"/"+fileName);
+                let file = paths.build.uploads(this.degradation[index]+"/"+fileName);
 
                 // This file size does exist.
                 if (file.exists) {
@@ -112,15 +112,19 @@ module.exports = function(app,url,paths,log,debug)
             return image.metadata().then(meta =>
             {
                 meta.size = size;
+
                 let modified = this.sizes[size].call(null, image, meta, sharp);
                 if (! modified) {
                     return null;
                 }
-                let outputFileName = typeof outputFile == 'function' ? outputFile(inputFile,meta) : outputFile;
+                meta.filename = typeof outputFile == 'function' ? outputFile(inputFile,meta) : outputFile;
+                meta.basename = path.basename(meta.filename);
 
-                log.info("creating file: %s -> %s",inputFile, outputFileName);
+                log.info("creating file: %s -> %s",inputFile, meta.filename);
 
-                return modified.toFile(outputFileName);
+                modified.toFile(meta.filename);
+
+                return meta;
             });
         }
 
@@ -138,7 +142,7 @@ module.exports = function(app,url,paths,log,debug)
                 return this.generate(size, inputFile, function(filePath, meta) {
                     let fileName = path.basename(filePath);
                     return paths.uploads(size+"/"+fileName);
-                })
+                });
             });
 
             return Promise.all(promises);

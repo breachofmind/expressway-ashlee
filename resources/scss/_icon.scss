@@ -23,6 +23,11 @@ $button-icon-size: map-get($button-sizes,default) !default;
 		height:20px;
 		fill:color-pick-contrast(get-color(primary));
 	}
+	&.link {
+		.al-icon svg {
+			fill:$primary-color;
+		}
+	}
 	&.primary .al-icon svg {
 		fill:color-pick-contrast(get-color(primary));
 	}

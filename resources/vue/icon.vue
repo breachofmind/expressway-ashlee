@@ -17,6 +17,7 @@
 		menu: "navigation.more_horiz",
 		link: "content.link",
 		delete: "action.delete",
+		save: "content.save",
 	};
 	module.exports = {
 	    name:"icon",

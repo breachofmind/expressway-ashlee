@@ -6,6 +6,9 @@
 					<div class="al-th al-td-action" data-col="bulk" v-if="options.bulk">
 						<input type="checkbox" v-model="checkAll" @change="selectAll($event)">
 					</div>
+					<div class="al-th al-td-preview" data-col="preview" v-if="showPreview">
+						<span>Preview</span>
+					</div>
 
 					<heading v-for="(field,column) in fields"
 					         :field="field"
@@ -69,6 +72,7 @@
 	                return {
 	                    bulk: true,
                         menu: true,
+		                preview:true,
 	                }
 				}
 			}
@@ -151,6 +155,10 @@
 					return a.concat([]);
 			    }, [])
 			},
+			showPreview()
+			{
+			    return this.options.preview == true && this.model.noImage;
+			}
 		},
 		watch: {
 			/**

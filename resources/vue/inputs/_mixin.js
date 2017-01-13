@@ -49,7 +49,7 @@ module.exports = {
          */
         link()
         {
-            return [this.definition.slug,this.record.id].join("/");
+            return "/"+[this.definition.slug,this.record.id].join("/");
         },
 
     },

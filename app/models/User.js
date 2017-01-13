@@ -41,7 +41,7 @@ class User extends Model
         // Attach the full name of the person and gravatar URL.
         this.on('toJSON', function(json,model,object) {
             json.name = object.name();
-            json.imageUrl = "https://www.gravatar.com/avatar/"+md5(object.email.toLowerCase())
+            json.$preview = "https://www.gravatar.com/avatar/"+md5(object.email.toLowerCase());
         });
     }
 

@@ -16,7 +16,7 @@ class UserPolicy extends ModelPolicy
             case 'delete' :
                 // You can't delete the superuser or yourself.
                 if (model && (model.is('superuser') || user.id == model.id)) {
-                    return test.fail('auth.gate_canNotModifyObject', [this.model.singular, user.email]);
+                    return test.fail('auth.gate_canNotDeleteObject', [this.model.singular, user.email]);
                 }
                 break;
         }

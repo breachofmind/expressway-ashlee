@@ -13,10 +13,11 @@ class Role extends Model
     {
         super(app);
 
-        this.title = 'name';
-        this.expose = false;
-        this.icon = 'action.lock';
-        this.sort = -1;
+        this.title   = 'name';
+        this.expose  = false;
+        this.icon    = 'action.lock';
+        this.sort    = -1;
+        this.noImage = null;
     }
 
     /**

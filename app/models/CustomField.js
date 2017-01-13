@@ -20,6 +20,7 @@ class CustomField extends Model
         this.icon       = "av.library_books";
         this.singular   = "Custom Field";
         this.plural     = "Custom Fields";
+        this.noImage    = null;
     }
 
     /**

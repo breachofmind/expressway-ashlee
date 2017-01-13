@@ -5,7 +5,7 @@
 		</div>
 
 		<a href="#" class="al-currentuser__image">
-			<img :src="user.imageUrl" alt="user gravatar">
+			<img :src="user.$preview" alt="user gravatar">
 		</a>
 
 		<a href="/auth/logout" class="al-currentuser__logout" title="Log out">

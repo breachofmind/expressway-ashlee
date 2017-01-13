@@ -51,7 +51,10 @@ class CMSIndexController extends Controller
 
         app.models.each(model =>
         {
-            json.objects.push(model.toJSON());
+            // Only deliver objects the user can view.
+            if (currentUser.can([model.name,'read'])) {
+                json.objects.push(model.toJSON());
+            }
         });
 
         // Get the custom model groups.

@@ -1,7 +1,7 @@
 <template>
 	<div class="al-layout__body">
 
-		<layout-body-header title="Dashboard" icon="action.dashboard">
+		<layout-body-header title="Dashboard" icon="action.dashboard" to="/">
 		</layout-body-header>
 
 

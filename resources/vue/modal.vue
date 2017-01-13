@@ -43,7 +43,7 @@
 	        return {
                 icon: "content.add_box",
                 title:"New "+object.singular,
-                body:require('./forms/new.vue'),
+                body:require('./forms/create.vue'),
                 options:{model:object},
                 buttons: []
             }

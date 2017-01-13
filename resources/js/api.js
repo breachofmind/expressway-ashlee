@@ -1,17 +1,26 @@
 "use strict";
+var axios = require('axios');
 
-var $http = require('axios');
-var BASE = "/api/v1/";
-var DEFAULT_HEADERS = {
-    "X-CSRF-TOKEN" : document.getElementById('CSRFTOKEN').getAttribute('content'),
-    "X-REQUESTED-WITH" : "XMLHttpRequest"
-};
+var $http = axios.create({
+    baseURL: "/api/v1/",
+    headers: {
+        "X-CSRF-TOKEN" : document.getElementById('CSRFTOKEN').getAttribute('content'),
+        "X-REQUESTED-WITH" : "XMLHttpRequest"
+    }
+});
 
-function getUrl(paths)
+/**
+ * Create a path given the args.
+ * @param paths string|Array
+ * @returns {*}
+ * @private
+ */
+function __url(paths="")
 {
-    if (! Array.isArray(paths)) paths = [paths];
-    return BASE + paths.join("/");
-
+    if (Array.isArray(paths)) {
+        return paths.join("/");
+    }
+    return paths;
 }
 
 class APIResource
@@ -29,9 +38,8 @@ class APIResource
      */
     get(paths,query=null)
     {
-        return $http.get(getUrl(paths),{
+        return $http.get(__url(paths),{
             params: query,
-            headers: DEFAULT_HEADERS
         });
     }
 
@@ -43,9 +51,17 @@ class APIResource
      */
     post(paths,params=null)
     {
-        return $http.post(getUrl(paths), params, {
-            headers: DEFAULT_HEADERS
-        });
+        return $http.post(__url(paths), params);
+    }
+
+    /**
+     * Update a record.
+     * @param paths string|array
+     * @returns {*}
+     */
+    put(paths,params=null)
+    {
+        return $http.put(__url(paths), params);
     }
 
     /**
@@ -55,10 +71,10 @@ class APIResource
      */
     delete(paths)
     {
-        return $http.delete(getUrl(paths), null, {
-            headers: DEFAULT_HEADERS
-        });
+        return $http.delete(__url(paths));
     }
+
+
 
     /**
      * Perform a resource search.
@@ -79,7 +95,7 @@ class APIResource
      */
     currentUser()
     {
-        return $http.get(BASE).then(response => {
+        return $http.get().then(response => {
             return response.data.currentUser;
         });
     }
@@ -91,7 +107,7 @@ class APIResource
     state()
     {
         return $http.post("/cms/_state", {}, {
-            headers: DEFAULT_HEADERS
+            baseURL: "/",
         }).then(response => {
             return response.data;
         })
@@ -108,18 +124,19 @@ class APIResource
         let args = id ? [slug,id] : [slug];
         return this.get(args).then(response => {
             return response.data;
-        }, this.errorHandler('Error getting resource '+args.join("/")));
+        });
     }
 
     /**
      * Default error handler.
-     * @param type
+     * @param handler {String} $modal|$snack
      * @returns {function(*)}
      */
-    errorHandler(type,handler='$modal')
+    errorHandler(handler='$snack')
     {
         return (err) => {
-            this.$vue[handler].alert(type+": "+err.message);
+            var response = err.response.data;
+            this.$vue[handler].alert(response.error.message);
         }
     }
 
