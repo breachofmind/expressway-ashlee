@@ -1,7 +1,2 @@
-name,slug,title,group,icon
-User,user,email,system,social.people
-Role,role,name,system,action.lock
-Media,media,title,system,image.photo_library
-CustomObject,custom-object,name,system,av.library_add
-CustomField,custom-field,label,system,av.library_books
-Project,project,title,custom-objects,action.assignment
+name,slug,title,icon
+Project,project,title,action.assignment

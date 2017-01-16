@@ -40,7 +40,7 @@
 			    return "/"+[this.definition.slug,this.record.id].join("/");
 			},
 			preview() {
-			    return this.record.$preview || this.definition.noImage;
+			    return this.record.$preview || this.definition.preview;
 			}
 		},
 		methods: {

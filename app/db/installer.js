@@ -1,5 +1,6 @@
 "use strict";
 var path = require('path');
+var _ = require('lodash');
 
 module.exports = function(app,seeder,permissions)
 {
@@ -18,16 +19,18 @@ module.exports = function(app,seeder,permissions)
         }
     ];
 
-    let customGroups = [
+    let templates = [
         {
-            name: "System",
-            slug: "system",
-        },
-        {
-            name:"Custom Objects",
-            slug:"custom-objects",
+            name: "Page",
+            description: "Default page template",
+            file: "page",
+            url: "/:slug",
+            slots: [
+                {component: "HTMLBlock", name:"body", content:"Hello World!"}
+            ]
         }
     ];
+
 
     let installer = seeder.add('cms', {
         path: path.resolve(__dirname, 'seeds') + "/",
@@ -41,6 +44,7 @@ module.exports = function(app,seeder,permissions)
             data.User[1].roles = [data.Role[1]._id];
             data.CustomGroup.map(row => {
                 row.author = admin._id;
+                row.objects = _.compact([].concat(row.objects.split("|")));
             });
             data.CustomField.map(row => {
                 row.author = admin._id;
@@ -48,12 +52,14 @@ module.exports = function(app,seeder,permissions)
             data.CustomObject.forEach(row => {
                 row.author = admin._id;
             });
+
         }
     });
 
     installer.add('User', 'users.csv');
     installer.add('Role', roles);
-    installer.add('CustomGroup', customGroups);
+    installer.add('CustomGroup', 'groups.csv');
     installer.add('CustomObject', 'objects.csv');
     installer.add('CustomField', 'fields.csv');
+    installer.add('Template', templates);
 };

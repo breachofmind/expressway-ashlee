@@ -3,6 +3,17 @@
 var Model = require('expressway').Model;
 var _     = require('lodash');
 
+const LABELS = {
+    name:    "Name",
+    author:  "Author",
+    active:  "Active",
+    expose:  "Public",
+    icon:    "Icon",
+    title:   "Title Field",
+    tip:     "Help tip",
+    preview: "Preview Image",
+};
+
 class CustomObject extends Model
 {
     /**
@@ -22,7 +33,7 @@ class CustomObject extends Model
         this.icon       = "av.library_add";
         this.singular   = "Custom Object";
         this.plural     = "Custom Objects";
-        this.noImage    = null;
+        this.preview    = null;
 
         this.hook(schema => {
             schema.virtual('fields', {
@@ -47,14 +58,15 @@ class CustomObject extends Model
         fields
             .slug()
             .timestamps()
-            .add('name',   types.Title)
-            .add('author', types.User)
-            .add('active', types.Boolean, 'fillable')
-            .add('expose', types.Boolean, 'fillable')
-            .add('group',  types.Text, 'required', {default:'custom-objects'}, 'fillable')
-            .add('icon',   types.Text, 'required', {default:"action.class"}, 'fillable')
-            .add('title',  types.Text, 'required', 'fillable')
-            .add('tip',    types.Text, 'fillable');
+            .add('name',    types.Title)
+            .add('author',  types.User)
+            .add('active',  types.Boolean, 'fillable')
+            .add('expose',  types.Boolean, 'fillable', 'display')
+            .add('icon',    types.Text, 'required', {default:"action.class"}, 'fillable')
+            .add('title',   types.Text, 'required', 'fillable','display')
+            .add('tip',     types.Text, 'fillable')
+            .add('preview', types.URL, 'fillable')
+            .labels(LABELS);
     }
 
     /**
@@ -71,7 +83,7 @@ class CustomObject extends Model
         methods.configureModel = function(model, overwriteBaseProps=true)
         {
             if (overwriteBaseProps) {
-                ['expose','group','icon','title','tip'].forEach(property => {
+                ['expose','icon','title','tip','preview'].forEach(property => {
                     model[property] = this[property];
                 });
             }

@@ -29,10 +29,19 @@ var inputTypes = [
     'Slug',
     'Text',
     'URL',
-    'Password'
+    'Password',
+    'Color',
+    'Number',
+    'ComponentSlots',
 ];
 inputTypes.forEach(type => {
     Vue.component('Input'+type, require('../vue/inputs/'+type+".vue"));
+});
+
+// Create custom component slot components.
+ASHLEE_COMPONENTS.forEach(def => {
+    console.log(def.name);
+    Vue.component(def.name, def.component());
 });
 
 require('./app');

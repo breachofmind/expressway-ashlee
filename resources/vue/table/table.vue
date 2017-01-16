@@ -157,7 +157,7 @@
 			},
 			showPreview()
 			{
-			    return this.options.preview == true && this.model.noImage;
+			    return this.options.preview == true && this.model.preview;
 			}
 		},
 		watch: {

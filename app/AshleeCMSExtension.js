@@ -2,6 +2,7 @@
 
 var Extension = require('expressway').Extension;
 var path = require('path');
+var Component = require('./Component');
 
 /**
  * The unchanging static file path.
@@ -26,6 +27,9 @@ class AshleeCMSExtension extends Extension
             path: STATIC_PATH+"/__webpack_hmr"
         };
 
+        // Add the component service.
+        app.service('components', app.load(require('./services/ComponentService')));
+
         // Create some useful paths.
         paths.add('cms_root', path.resolve(__dirname,".."));
         paths.add('cms_resources', paths.cms_root('resources'));
@@ -45,9 +49,11 @@ class AshleeCMSExtension extends Extension
             require('./models/CustomGroup'),
             require('./models/CustomObject'),
             require('./models/CustomField'),
+            require('./models/Template'),
             require('./middlewares/AshleeFrontend'),
             require('./middlewares/AshleeNotFound'),
             require('./controllers/CMSIndexController'),
+            require('./controllers/TemplateController'),
         ]);
 
         locale.addDirectory(paths.cms_resources('locale'));
@@ -71,8 +77,9 @@ class AshleeCMSExtension extends Extension
 
         this.routes = [
             {
-                'GET /'        : 'CMSIndexController.index',
-                'POST /_state' : 'CMSIndexController.state'
+                'GET /'              : 'CMSIndexController.index',
+                'GET /components.js' : 'CMSIndexController.script',
+                'POST /_state'       : 'CMSIndexController.state',
             },
             'AshleeNotFound'
         ];
@@ -86,8 +93,10 @@ class AshleeCMSExtension extends Extension
      * @param url URLService
      * @param paths PathService
      */
-    boot(next,app,url,paths)
+    boot(next,app,url,paths,components)
     {
+        components.add(require('./components/HTMLBlock'));
+
         app.call(this,'setupExtensions');
         app.alias('cms', this.base);
         app.alias('static', this.base + STATIC_PATH + "/");
@@ -151,8 +160,10 @@ class AshleeCMSExtension extends Extension
         return function(view) {
             view.use('cmsVersion', cms.package.version);
             view.meta('generator', 'Expressway Ashlee CMS v.'+cms.package.version);
-            view.script('ashleeScripts', app.alias('static') + 'base.bundle.js');
-            view.script('ashleeScripts', app.alias('static') + 'main.bundle.js');
+            view.script('ashleeCmpJs', "/cms/components.js");
+            view.script('ashleeBaseJs', app.alias('static') + 'base.bundle.js');
+            view.script('ashleeMainJs', app.alias('static') + 'main.bundle.js');
+
             //view.style('ashleeAppStyles', app.alias('static') + 'base.css');
             //view.style('ashleeBaseStyles', app.alias('static') + 'main.css');
         }

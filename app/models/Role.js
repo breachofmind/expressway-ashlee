@@ -17,7 +17,7 @@ class Role extends Model
         this.expose  = false;
         this.icon    = 'action.lock';
         this.sort    = -1;
-        this.noImage = null;
+        this.preview = null;
     }
 
     /**
@@ -30,7 +30,7 @@ class Role extends Model
         fields
             .timestamps()
             .add('name',        types.Title)
-            .add('description', types.Text, 'fillable')
+            .add('description', types.Text, 'fillable','display')
             .add('permissions', types.StringArray)
             .labels(LABELS);
     }

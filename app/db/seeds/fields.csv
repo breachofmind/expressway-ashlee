@@ -1,18 +1,4 @@
 object,label,name,type,priority
-user,Email,email,Email,0
-user,First Name,first_name,Text,1
-user,Last Name,last_name,Text,2
-user,Password,password,Password,3
-role,Name,name,Text,0
-role,Description,description,Text,1
-custom-object,Name,name,Text,0
-custom-object,Slug,slug,Slug,1
-custom-object,Title,title,Text,2
-custom-object,Expose,expose,Boolean,3
-custom-field,Label,label,Text,0
-custom-field,Name,name,Text,2
-custom-field,Type,type,Text,3
-custom-field,Object,object,Text,1
 project,Title,title,Text,0
 project,Type,type,Text,1
 project,URL,url,URL,2

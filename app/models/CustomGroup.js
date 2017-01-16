@@ -3,6 +3,14 @@
 var Model = require('expressway').Model;
 var _     = require('lodash');
 
+const LABELS = {
+    name: "Name",
+    author: "Author",
+    color: "Color",
+    objects: "Objects",
+    active: "Active"
+};
+
 class CustomGroup extends Model
 {
     /**
@@ -16,24 +24,11 @@ class CustomGroup extends Model
 
         this.title      = 'name';
         this.expose     = true;
-        this.populate   = ['objects'];
         this.managed    = "author";
         this.icon       = "image.filter_none";
         this.singular   = "Custom Group";
         this.plural     = "Custom Groups";
-        this.noImage    = null;
-
-        this.hook(schema => {
-            schema.virtual('objects', {
-                ref: "CustomObject",
-                localField: "slug",
-                foreignField: "group"
-            });
-        })
-
-        this.on('toJSON', function(json,model,object) {
-            json.objects = object.objects;
-        });
+        this.preview    = null;
     }
 
     /**
@@ -47,7 +42,10 @@ class CustomGroup extends Model
             .timestamps()
             .add('name',   types.Title)
             .add('author', types.User)
-            .add('active', types.Boolean, 'fillable')
+            .add('color',  types.Color,'display','fillable')
+            .add('objects', types.StringArray)
+            .add('active', types.Boolean, 'fillable', 'display')
+            .labels(LABELS);
 
     }
 

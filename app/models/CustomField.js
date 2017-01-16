@@ -2,6 +2,20 @@
 
 var Model = require('expressway').Model;
 var _     = require('lodash');
+const LABELS = {
+    label: "Label",
+    author: "Author",
+    display: "Displayed",
+    fillable: "Fillable",
+    object: "Object",
+    name: "Name",
+    type: "Type",
+    priority: "Priority",
+    validators: "Validators",
+    options: "Options",
+    value: "Value",
+    tip: "Help tip"
+}
 
 class CustomField extends Model
 {
@@ -20,7 +34,7 @@ class CustomField extends Model
         this.icon       = "av.library_books";
         this.singular   = "Custom Field";
         this.plural     = "Custom Fields";
-        this.noImage    = null;
+        this.preview    = null;
     }
 
     /**
@@ -33,16 +47,17 @@ class CustomField extends Model
             .timestamps()
             .add('label',      types.Title)
             .add('author',     types.User)
-            .add('display',    types.Boolean, 'fillable')
-            .add('fillable',   types.Boolean, 'fillable')
-            .add('object',     types.Text, 'required', 'fillable')
-            .add('name',       types.Text, 'required', 'fillable')
-            .add('type',       types.Text, 'required', 'fillable')
+            .add('display',    types.Boolean, 'fillable', 'display')
+            .add('fillable',   types.Boolean, 'fillable', 'display')
+            .add('object',     types.Text, 'required', 'fillable','display')
+            .add('name',       types.Text, 'required', 'fillable','display')
+            .add('type',       types.Text, 'required', 'fillable','display')
             .add('priority',   types.Number, {default:0}, 'fillable')
             .add('validators', types.StringArray)
             .add('options',    types.ObjectArray)
             .add('value',      types.Mixed)
             .add('tip',        types.Text, 'fillable')
+            .labels(LABELS);
     }
 
     /**

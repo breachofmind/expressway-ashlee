@@ -34,6 +34,22 @@ class CMSIndexController extends Controller
         return view;
     }
 
+    script(request,response,next,components)
+    {
+        response.set('content-type', 'text/javascript');
+        let out = components.each(component => {
+            return `components.push({name:"${component.name}", component:function() { return ${component.input().trim()}; } })`;
+        });
+
+        return `
+            var ASHLEE_COMPONENTS = (function(components){
+                ${out.join(";\n")}
+            
+                return components;
+            })([]);
+            `;
+    }
+
     /**
      * Returns the application state for the logged in user.
      * POST /_state
@@ -58,16 +74,8 @@ class CMSIndexController extends Controller
         });
 
         // Get the custom model groups.
-        return customGroupRepository.then(customGroups =>
-        {
-            customGroups.forEach(group =>
-            {
-                group.objects = group.objects.map(customObject => {
-                    return customObject.slug;
-                });
-                json.groups.push(group);
-            });
-
+        return customGroupRepository.then(customGroups => {
+            json.groups = customGroups;
             return json;
         });
     }
