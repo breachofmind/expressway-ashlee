@@ -1,9 +1,9 @@
 <template>
-	<div v-if="editing" class="al-input-group" :class="inputGroupClasses">
-		<div class="al-input-label" v-if="! inline">
+	<div v-if="editing" class="al-input-group row" :class="inputGroupClasses">
+		<div class="al-input-label column" v-if="! inline">
 			<label :for="inputId">{{field.label}}</label>
 		</div>
-		<div class="al-input-field">
+		<div class="al-input-field column">
 			<input
 					:id="inputId"
 					:class="inputClasses"
@@ -25,8 +25,5 @@
 module.exports = {
     mixins: [require('./_mixin')],
     name: "NumberInput",
-	computed: {
-
-	}
 }
 </script>

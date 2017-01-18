@@ -10,6 +10,7 @@ var store = new Vuex.Store({
         currentUser: {},
         objects: {},
         groups: {},
+        components: [],
         lastFormSaved: null,
         lastRecordDeleted: null,
     },
@@ -28,6 +29,8 @@ var store = new Vuex.Store({
                         return item.slug;
                     });
                     state.groups = response.groups;
+                    state.components = response.components;
+
                 }, STATE_LOAD_TIMEOUT)
             });
         },
@@ -42,6 +45,14 @@ var store = new Vuex.Store({
         tableUpdate(state,slug)
         {
             return slug;
+        }
+    },
+    getters: {
+        objectArray(state)
+        {
+            return Object.keys(state.objects).map(key => {
+                return state.objects[key];
+            })
         }
     }
 });
@@ -62,7 +73,16 @@ class Model {
             this[key] = object[key];
         });
     }
-
+    
+    get hasSlugField()
+    {
+        var yes = false;
+        this.fields.forEach(field => {
+            if (field.typeName == 'Slug') return yes = true;
+        });
+        return yes;
+    }
+    
     getFields(type) {
         var fields = [];
         this.fields.forEach(field => {

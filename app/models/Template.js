@@ -10,6 +10,7 @@ const LABELS = {
     slots: "Component Slots",
     description:   "Description",
     priority: "Priority",
+    controller: "Controller"
 };
 
 class Template extends Model
@@ -40,6 +41,7 @@ class Template extends Model
             .add('file', types.Text, 'required','fillable','display')
             .add('description', types.Text,'fillable','display')
             .add('priority', types.Number, 'fillable','display', {default:0})
+            .add('controller', types.Text, 'fillable', 'required', {default:"TemplateController.default"})
             .add('slots', types.ComponentSlots)
             .labels(LABELS);
     }
@@ -63,14 +65,15 @@ class Template extends Model
             function templateLoader (id)
             {
                 // Looks up the template ID to refresh the content.
-                return function(request,response,next,Template)
+                return function templateLoader (request,response,next,Template)
                 {
                     Template.findById(id).then(template => {
                         response.view.template(template.file);
                         response.view.use('template', template);
+                        response.view.meta('templateId', template.id);
 
                         components.render(request,response,next,template.slots).then(rendered => {
-                            response.view.use('components', rendered);
+                            response.view.use('cmp', rendered);
                             next();
                         });
                     })
@@ -79,7 +82,7 @@ class Template extends Model
             }
 
             return {
-                ["GET "+template.url] : [templateLoader(this.id), template.controller || 'TemplateController.default']
+                ["GET "+template.url] : [templateLoader(this.id), template.controller]
             }
         };
 

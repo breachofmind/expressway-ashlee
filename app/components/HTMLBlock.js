@@ -23,41 +23,15 @@ class HTMLBlock extends Component
      */
     render(done,request,response,next,data)
     {
+        var attr = {"id": data.id, "class": data.classes};
+        if (request.user) {
+            attr['data-ashlee'] = `${data.name}:${data.index.toString()}`;
+            attr['contenteditable'] = true;
+        }
         return done(this.element({
             text: data.content,
-            attr: {
-                "id": data.id,
-                "class":data.classes,
-                "data-slot": data.templateId + ":" + data.index},
+            attr: attr,
         }));
-    }
-
-    input()
-    {
-        return `
-            {
-                name:"HTMLBlockComponent",
-                props:['options'],
-                data: function() {
-                    return {params: this.options};
-                },
-                template:\`
-                	<div>
-                        <label>Name</label>
-                        <input type="text" v-model="params.name">
-                        
-                        <label>ID</label>
-                        <input type="text" v-model="params.id">
-                
-                        <label>Classes</label>
-                        <input type="text" v-model="params.classes">
-                
-                        <label>HTML</label>
-                        <textarea name="html" v-model="params.content"></textarea>
-                    </div>
-                \`
-            }
-            `;
     }
 }
 

@@ -34,22 +34,6 @@ class CMSIndexController extends Controller
         return view;
     }
 
-    script(request,response,next,components)
-    {
-        response.set('content-type', 'text/javascript');
-        let out = components.each(component => {
-            return `components.push({name:"${component.name}", component:function() { return ${component.input().trim()}; } })`;
-        });
-
-        return `
-            var ASHLEE_COMPONENTS = (function(components){
-                ${out.join(";\n")}
-            
-                return components;
-            })([]);
-            `;
-    }
-
     /**
      * Returns the application state for the logged in user.
      * POST /_state
@@ -57,13 +41,17 @@ class CMSIndexController extends Controller
      * @param response
      * @param next
      */
-    state(request,response,next,app,currentUser,customGroupRepository)
+    state(request,response,next,app,currentUser,customGroupRepository,components)
     {
         let json = {
             user: currentUser,
             objects:[],
             groups: [],
+            components:[]
         };
+        components.each(object => {
+            json.components.push(object.toJSON());
+        });
 
         app.models.each(model =>
         {

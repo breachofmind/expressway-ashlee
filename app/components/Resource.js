@@ -1,6 +1,7 @@
 "use strict";
 
 var Component = require('../Component');
+var _ = require('lodash');
 
 class Resource extends Component
 {
@@ -23,30 +24,40 @@ class Resource extends Component
      */
     render(done,request,response,next,data)
     {
-        let {model,id,template} = data;
+        let {model,filter,template} = data;
 
         let Model = this.app.models.get(model);
-        let filter = typeof id == 'string' ? {[Model.primaryKey]: id} : id;
+
+        let filterName = Model.primaryKey;
+        let filterValue = filter;
+
+        // The parameter is part of the URL request.
+        if (filter.startsWith(":")) {
+            filterName = _.trimStart(filter,":");
+            filterValue = request.params[filterName];
+        } else if (filter.startsWith("?")) {
+            filterName = _.trimStart(filter,"?");
+            filterValue = request.query[filterName];
+        }
+
+        // If we're using an ID parameter, it should equal the model's primaryKey attribute.
+        if (filterName == "id") filterName = Model.primaryKey;
 
         // Get the resource and render the template.
-        Model.first(filter).then(resource => {
-            app.root.render(template, {model:resource}).then(html => {
-                return done(html);
-            });
-        });
-    }
+        Model.first({[filterName] : filterValue}).then(resource => {
 
-    /**
-     * Return the Vue component for editing.
-     * @returns {string}
-     */
-    input()
-    {
-        return `
-            {
-              name:"ResourceComponent",
+            if (! resource) {
+                return response.smart(404);
             }
-            `;
+            if (template) {
+                return app.root.render(template, {model: resource}).then(html =>
+                {
+                    return done(html);
+                });
+            }
+
+            return done(resource);
+        });
     }
 }
 

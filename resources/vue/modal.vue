@@ -76,7 +76,7 @@
 			}
 		},
 
-		mounted()
+		created()
 		{
             Vue.prototype.$modal = this;
 		},

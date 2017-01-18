@@ -24,18 +24,22 @@
 
 
 		<layout-page-container>
-			<div class="al-layout__page has-card-shadow">
+
+			<div class="al-layout__page has-card-shadow" v-if="! loading">
 				<edit-form :input="record" :options="{model:model}"></edit-form>
+			</div>
+			<div v-else class="al-layout__body is-loading">
+				<div class="al-loader"><div class="al-loader-object"></div></div>
 			</div>
 		</layout-page-container>
 
 	</div>
 
-
 </template>
 
 <script>
 	var UPDATE_TIMEOUT = 600;
+	var LOAD_TIMEOUT = 300;
 
 	module.exports = {
 		name:"EditView",
@@ -48,11 +52,20 @@
 		},
 		created()
 		{
-		    this.loading = true;
-		    this.$api.resource(this.$route.params.model, this.$route.params.id).then(response => {
-		        this.record = response.data;
-                this.loading = false;
-		    })
+			this.fetchData();
+
+		    // Listen for a Ctrl-S event.
+            document.addEventListener('keydown', (event) => {
+                if (event.which == 19 || (event.which == 115 && event.ctrlKey) || (event.which == 83 && event.metaKey)) {
+                    event.preventDefault();
+					this.save();
+                }
+            })
+		},
+		watch: {
+		    "$route": function() {
+		        this.fetchData();
+		    }
 		},
         computed: {
 	        model() {
@@ -68,6 +81,8 @@
              */
 		    save()
 		    {
+		        if (this.saving) return;
+
 		        this.saving = true;
 
 		        setTimeout(() => {
@@ -88,6 +103,17 @@
 		            out[field.name] = this.record[field.name];
 		        });
 		        return out;
+		    },
+
+		    fetchData()
+		    {
+                this.loading = true;
+                this.$api.resource(this.$route.params.model, this.$route.params.id).then(response => {
+                    setTimeout(() => {
+                        this.record = response.data;
+                        this.loading = false;
+                    },LOAD_TIMEOUT)
+                });
 		    }
 		},
 		components: {

@@ -6,7 +6,7 @@
 				:record="input" :field="field"
 				:definition="model"
 				:editing="true"
-				@change="dirty=true"
+				@change="onChange"
 				v-for="field in fields">
 		</component>
 
@@ -36,15 +36,24 @@
 		        return this.options.model;
 		    },
 			fields() {
-		        return this.model.getFields('fillable');
+		        return this.model.getFields('required');
 			},
+		},
+		created()
+		{
+		    this.fields.forEach(field => {
+		        this.input[field.name] = null;
+		    });
 		},
         methods: {
 			submit($event)
 			{
 			    this.submitting = true;
-			    this.$api.post(this.model.slug, this.input).then(response => {
+
+			    this.$api.post(this.model.slug, this.input).then(response =>
+			    {
 			        setTimeout(() => {
+			            var createdObject = response.data.data;
                         this.$snack.success(this.model.singular+" created.");
                         this.$modal.close();
                         this.submitting = false;
@@ -54,9 +63,19 @@
                         });
                         this.$store.commit('tableUpdate', this.model.slug);
 
+                        // If we're on an interior route, push to the new page?
+                        if (this.$route.params.id) {
+                            this.$router.push({name:"edit", params: {model:this.model.slug, id:createdObject.id}});
+                        }
+
 			        }, SUBMIT_TIMEOUT)
 
 			    }).catch(this.$api.errorHandler());
+			},
+
+			onChange(input)
+			{
+			    this.$emit('change', input);
 			}
         }
     }

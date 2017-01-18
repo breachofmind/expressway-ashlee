@@ -1,4 +1,4 @@
 name,slug,objects,color
-System,system,user|role|custom-group|custom-object|custom-field|template,red
+System,system,user|role|media|custom-group|custom-object|custom-field|template,red
 Custom Objects,custom-objects,project,blue
-Blog,blog,,green
+Blog,blog,post,green

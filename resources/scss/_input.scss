@@ -16,7 +16,6 @@
 }
 
 .al-input-group {
-	display:flex;
 	margin-bottom: 10px;
 
 	&.is-required {
@@ -30,14 +29,28 @@
 	}
 }
 .al-input-label {
-	flex-basis: 120px;
-	flex-shrink:0;
+	padding:0;
+	flex:0 0 140px;
+}
+.al-input-label-full {
+	width:100%;
+	display:block;
+	text-align:center;
+	background:#efefef;
+	padding:4px 8px;
+	margin-bottom:10px;
 }
 .al-input-field {
 	width:100%;
+	padding:0;
 	input {margin:0;}
 }
 
 .al-form__actions {
 	text-align:right;
+}
+
+.al-input-component-slot {
+	padding:10px;
+	border-bottom: 1px solid #efefef;
 }

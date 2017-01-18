@@ -37,19 +37,12 @@ class AshleeCMSExtension extends Extension
         paths.add('cms_public', paths.cms_root('public'));
 
         app.use([
-            require('expressway/src/providers/ModelProvider'),
             require('expressway-rest'),
             require('expressway/src/middlewares/Development'),
             require('./providers/GraphicsProvider'),
             require('./providers/CustomObjectProvider'),
             require('./providers/AshleePoliciesProvider'),
-            require('./models/User'),
-            require('./models/Role'),
-            require('./models/Media'),
-            require('./models/CustomGroup'),
-            require('./models/CustomObject'),
-            require('./models/CustomField'),
-            require('./models/Template'),
+            require('./models'),
             require('./middlewares/AshleeFrontend'),
             require('./middlewares/AshleeNotFound'),
             require('./controllers/CMSIndexController'),
@@ -77,9 +70,8 @@ class AshleeCMSExtension extends Extension
 
         this.routes = [
             {
-                'GET /'              : 'CMSIndexController.index',
-                'GET /components.js' : 'CMSIndexController.script',
-                'POST /_state'       : 'CMSIndexController.state',
+                'GET /'        : 'CMSIndexController.index',
+                'POST /_state' : 'CMSIndexController.state',
             },
             'AshleeNotFound'
         ];
@@ -92,10 +84,12 @@ class AshleeCMSExtension extends Extension
      * @param app Application
      * @param url URLService
      * @param paths PathService
+     * @param components ComponentService
      */
     boot(next,app,url,paths,components)
     {
         components.add(require('./components/HTMLBlock'));
+        components.add(require('./components/Resource'));
 
         app.call(this,'setupExtensions');
         app.alias('cms', this.base);
@@ -155,13 +149,16 @@ class AshleeCMSExtension extends Extension
      * @param cms Extension
      * @returns {Function}
      */
-    viewDefaults(app,url,cms)
+    viewDefaults(app,url,cms,config)
     {
         return function(view) {
             view.use('cmsVersion', cms.package.version);
             view.meta('generator', 'Expressway Ashlee CMS v.'+cms.package.version);
-            view.script('ashleeCmpJs', "/cms/components.js");
+
             view.script('ashleeBaseJs', app.alias('static') + 'base.bundle.js');
+            // Load custom scripts
+            view.use(config('ashlee.scripts', []));
+            // Load the main ashlee application bundle
             view.script('ashleeMainJs', app.alias('static') + 'main.bundle.js');
 
             //view.style('ashleeAppStyles', app.alias('static') + 'base.css');

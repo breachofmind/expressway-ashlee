@@ -1,17 +1,18 @@
 <template>
-	<div v-if="editing" class="al-input-group" :class="inputGroupClasses">
-		<div class="al-input-label" v-if="! inline">
+	<div v-if="editing" class="al-input-group row" :class="inputGroupClasses">
+		<div class="al-input-label column" v-if="! inline">
 			<label :for="inputId">{{field.label}}</label>
 		</div>
-		<div class="al-input-field">
+		<div class="al-input-field column">
 			<input
 					:id="inputId"
 					:class="inputClasses"
 					v-model="record[field.name]"
 					:required="field.required"
 					:name="field.name"
-					@change="$emit('change')"
+					@change="changeInput()"
 					type="text"
+			        :placeholder="field.default"
 			>
 		</div>
 	</div>
@@ -26,8 +27,17 @@
 module.exports = {
     mixins: [require('./_mixin')],
     name: "TextInput",
-	computed: {
-
+	created()
+	{
+	    if (this.editing && ! this.value) {
+	        this.value = this.field.default;
+	    }
+	},
+	methods: {
+        changeInput()
+        {
+            this.$emit('change', this);
+        }
 	}
-}
+};
 </script>

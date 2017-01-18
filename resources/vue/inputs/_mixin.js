@@ -4,6 +4,13 @@ module.exports = {
     data() {
         return {}
     },
+    created()
+    {
+        // Use the default value if editing the object.
+        if (this.editing && this.value == undefined) {
+            this.record[this.field.name] = this.field.default;
+        }
+    },
     computed: {
         /**
          * Return the unique input ID.
@@ -26,8 +33,13 @@ module.exports = {
          * Get the value of the field with the current record.
          * @returns {*}
          */
-        value() {
-            return this.record[this.field.name];
+        value: {
+            get() {
+                return this.record[this.field.name];
+            },
+            set(value) {
+                this.record[this.field.name] = value;
+            }
         },
         /**
          * Check if the current field name is the title field.

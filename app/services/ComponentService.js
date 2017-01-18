@@ -38,13 +38,11 @@ module.exports = function(app,debug)
 
                 return new Promise(done => {
                     object.index = index;
-                    if (response.view.data.template) {
-                        object.templateId = response.view.data.template.id;
-                    }
                     component.render(done,request,response,next,object);
 
-                }).then(html => {
-                    return {[object.name]: html}
+                }).then(returnResult => {
+                    // Result could be html text or object.
+                    return {[object.name]: returnResult}
                 });
             });
 

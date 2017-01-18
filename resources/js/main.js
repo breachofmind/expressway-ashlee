@@ -4,23 +4,29 @@ require('../scss/ashlee.scss');
 var Vue         = require('vue');
 var VueRouter   = require('vue-router');
 var Vuex        = require('vuex');
-var VueAPI      = require('./api');
+var VueAPI      = require('./services/api');
 
 Vue.use(VueRouter);
 Vue.use(Vuex);
 Vue.use(VueAPI);
 
 // Components
-Vue.component('icon', require('../vue/icon.vue'));
-Vue.component('modal', require('../vue/modal.vue'));
-Vue.component('snackbar', require('../vue/snackbar.vue'));
-Vue.component('nav-link', require('../vue/nav-link.vue'));
-Vue.component('dropdown-menu', require('../vue/dropdown-menu.vue'));
-Vue.component('layout-sidebar', require('../vue/views/layout/sidebar.vue'));
-Vue.component('layout-header', require('../vue/views/layout/header.vue'));
-Vue.component('layout-body-header', require('../vue/views/layout/body-header.vue'));
-Vue.component('layout-page-container', require('../vue/views/layout/page-container.vue'));
+var componentMap = {
+    "icon"                  : 'icon.vue',
+    "modal"                 : 'modal.vue',
+    "snackbar"              : 'snackbar.vue',
+    "nav-link"              : 'nav-link.vue',
+    "dropdown-menu"         : "dropdown-menu.vue",
+    "layout-sidebar"        : "views/layout/sidebar.vue",
+    "layout-header"         : "views/layout/header.vue",
+    "layout-body-header"    : "views/layout/body-header.vue",
+    "layout-page-container" : "views/layout/page-container.vue",
+    "component-slot-header" : "forms/component-slot-header.vue",
+};
 
+Object.keys(componentMap).forEach(key => {
+    Vue.component(key, require('../vue/'+componentMap[key]));
+});
 
 // Input components
 var inputTypes = [
@@ -39,9 +45,12 @@ inputTypes.forEach(type => {
 });
 
 // Create custom component slot components.
-ASHLEE_COMPONENTS.forEach(def => {
-    console.log(def.name);
-    Vue.component(def.name, def.component());
+window.ashlee.components.each((name,fn) =>
+{
+    var obj = fn.call(fn,Vue);
+    obj.props = ['options','index'];
+    obj.name = name;
+    Vue.component(name, obj);
 });
 
 require('./app');

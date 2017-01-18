@@ -56,17 +56,26 @@ class Component
     }
 
     /**
-     * Return the vue component instance.
-     * @param data
+     * Create a wrapper for the rendered content.
+     * @param attr
+     * @returns {*}
      */
-    input(data)
-    {
-        throw new Error(this.name+'.input() unimplemented');
-    }
-
     element(attr)
     {
         return utils.element('div', attr);
+    }
+
+    /**
+     * Convert this object to a JSON.
+     * @returns {{}}
+     */
+    toJSON()
+    {
+        let out = {};
+        ['name','label','tip'].forEach(property => {
+            out[property] = this[property];
+        });
+        return out;
     }
 
     /**
