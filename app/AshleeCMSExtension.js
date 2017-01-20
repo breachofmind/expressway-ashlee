@@ -51,7 +51,16 @@ class AshleeCMSExtension extends Extension
 
         locale.addDirectory(paths.cms_resources('locale'));
 
-        this.staticPaths[STATIC_PATH] = paths.cms_public();
+        app.call(this,'configureRoutes');
+    }
+
+    /**
+     * Configure the CMS routes.
+     * @param paths
+     */
+    configureRoutes(paths)
+    {
+        this.routes.static(STATIC_PATH, paths.cms_public());
 
         this.routes.middleware([
             'Development',
