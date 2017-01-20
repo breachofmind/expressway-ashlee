@@ -1,7 +1,6 @@
 var _   = require('lodash');
 var expressway = require('expressway');
 var Model = expressway.Model;
-var Promise = expressway.Promise;
 
 const LABELS = {
     name:  "Name",
@@ -49,6 +48,7 @@ class Template extends Model
     /**
      * Create the role model methods.
      * @param methods {Object}
+     * @param components {ComponentService}
      * @returns {Object}
      */
     methods(methods,components)
@@ -90,26 +90,22 @@ class Template extends Model
     }
 
     /**
-     * Create routes from all Template objects.
-     * @param extension
-     * @param components
-     * @returns {expressway.Promise}
+     * Return a template loader to add to an extension router.
+     * @returns {function}
      */
-    routes(extension)
+    get loader()
     {
-        return new Promise(resolve =>
-        {
-            this.all().then(templates =>
-            {
-                templates.forEach(template =>
-                {
-                    extension.routes.push( template.route() );
+        let Template = this;
+
+        return function() {
+            return Template.all().then(templates => {
+                let objects = templates.map(template => {
+                    return template.route();
                 });
 
-                resolve(templates);
+                return _.assign({},...objects);
             });
-        })
-
+        };
     }
 }
 

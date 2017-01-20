@@ -53,8 +53,7 @@ class AshleeCMSExtension extends Extension
 
         this.staticPaths[STATIC_PATH] = paths.cms_public();
 
-        // Routes.
-        this.middleware = [
+        this.routes.middleware([
             'Development',
             'Static',
             'Init',
@@ -66,15 +65,16 @@ class AshleeCMSExtension extends Extension
             'BasicAuth',
             'Flash',
             'AuthRequired'
-        ];
+        ]);
 
-        this.routes = [
+        this.routes.add([
             {
                 'GET /'        : 'CMSIndexController.index',
                 'POST /_state' : 'CMSIndexController.state',
-            },
-            'AshleeNotFound'
-        ];
+            }
+        ]);
+
+        this.routes.error(404, 'AshleeNotFound');
     }
 
     /**
@@ -88,6 +88,8 @@ class AshleeCMSExtension extends Extension
      */
     boot(next,app,url,paths,components)
     {
+        app.root.routes.after('BasicAuth', 'AshleeFrontend');
+
         components.add(require('./components/HTMLBlock'));
         components.add(require('./components/Resource'));
 
@@ -131,7 +133,6 @@ class AshleeCMSExtension extends Extension
         auth.forgotView     = "cms:auth/forgot";
         auth.resetView      = "cms:auth/reset";
         auth.resetEmailView = "cms:email/reset";
-        app.root.middleware.push('AshleeFrontend');
 
         let defaults = app.call(this,'viewDefaults');
 
