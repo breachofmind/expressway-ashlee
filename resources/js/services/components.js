@@ -25,7 +25,7 @@ ashlee.components.add('Resource', function(Vue) {
     return {
         template:`
 <div class="al-component__Resource row">
-    <div class="column small-6">
+    <div class="column small-12">
         <label>Resource</label>
         <select v-model="options.model">
             <option value="">Select...</option>
@@ -34,7 +34,7 @@ ashlee.components.add('Resource', function(Vue) {
             </option>
         </select>
     </div>
-    <div class="column small-6">
+    <div class="column small-12">
         <label>Filter/Resource ID</label>
         <input type="text" v-model="options.filter">
     </div>

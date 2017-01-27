@@ -1,20 +1,21 @@
 <template>
-	<header class="al-component-slot-header row">
-		<div class="column">
+	<header class="al-component-slot-header">
+		<div class="al-component-slot__name row">
 			<label>Name</label>
-			<input type="text" v-model="options.name">
+			<input type="text" v-model="options.name" placeholder="Name">
 		</div>
-		<div class="column">
+		<div class="al-component-slot__id row">
 			<label>ID</label>
 			<input type="text" v-model="options.id">
 		</div>
-		<div class="column">
+		<div class="al-component-slot__classes row">
 			<label>Classes</label>
 			<input type="text" v-model="options.classes">
 		</div>
-		<div class="column">
-			<button class="button link alert" @click.prevent="clickDelete()" title="Remove">
+		<div class="al-component-slot__action row">
+			<button class="button link has-icon" @click.prevent="clickDelete()" title="Remove">
 				<icon type="delete"></icon>
+				<span>Remove</span>
 			</button>
 		</div>
 	</header>

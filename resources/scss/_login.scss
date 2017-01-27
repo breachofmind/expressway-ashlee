@@ -1,0 +1,37 @@
+.al-login-left,
+.al-login-right {
+	min-height:100vh;
+}
+
+.al-login-left {
+	padding:40px;
+	padding-bottom:100px;
+	display:flex;
+	align-items:center;
+}
+.al-login-form-container {
+	width:100%;
+}
+
+.al-login-right {
+	background:url(/cms/static/images/ashlee-login-bg.jpg) no-repeat center $primary-color;
+	background-size:cover;
+}
+
+.al-login-header {
+	padding:30px 0;
+}
+.al-login-header h1 {
+	font-size:36px;
+	color: #d3d3d3;
+}
+
+.al-login-input {
+	font-weight:700;
+}
+
+.al-login-footer {
+	text-align:right;
+	font-size:14px;
+	color:#d3d3d3;
+}

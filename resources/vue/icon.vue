@@ -18,6 +18,7 @@
 		link: "content.link",
 		delete: "action.delete",
 		save: "content.save",
+		close: "navigation.close"
 	};
 	module.exports = {
 	    name:"icon",

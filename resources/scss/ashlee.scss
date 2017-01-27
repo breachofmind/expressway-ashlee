@@ -7,49 +7,13 @@
 @import 'table';
 @import 'input';
 @import 'layout';
+@import 'login';
 @import 'nav';
+@import 'dropdown';
+@import 'overlay';
 
 .has-card-shadow {
 	background:white;
 	border-radius:$global-radius;
 	box-shadow:1px 1px 2px rgba(black,0.4);
-}
-
-.al-dropdown {
-	position:relative;
-	&__container {
-		position:absolute;
-		top:100%;
-		right:0;
-		min-width:120px;
-		max-width:300px;
-		z-index:5;
-		list-style: none;
-		margin:0;
-		background:white;
-		border:1px solid lightgray;
-		>a,>div {
-			color:$black;
-			width:100%;
-			display:block;
-			padding:3px 8px;
-			border-bottom: 1px solid lightgray;
-		}
-		>a .al-icon {
-			position:relative;
-			top:4px;
-		}
-		>a:hover, >a:focus {
-			background: #efefef;
-		}
-		>a.is-danger {
-			color:$alert-color;
-			.al-icon svg {fill: $alert-color;}
-		}
-	}
-}
-
-.al-color-swatch {
-	display:block;
-	width:30px; height:30px;
 }

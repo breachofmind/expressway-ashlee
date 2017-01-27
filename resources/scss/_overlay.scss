@@ -1,0 +1,130 @@
+$overlay-margin: 15px;
+$overlay-radius: $global-radius;
+$thumb-size:140px;
+$media-thumb-width-lg: 100% / 6;
+$media-thumb-width-md: 100% / 4;
+$media-thumb-width-sm: 100% / 2;
+$media-thumb-loading-bg:white;
+$media-thumb-padding:4px;
+$overlay-header-height: 67px;
+$bg-falloff: linear-gradient(to bottom, rgba(white,0) 0%, rgba(white,0.15) 60%, rgba(black,0.3) 100%);
+
+
+.al-overlay-wrapper {
+	position:fixed;
+	top: $overlay-margin;
+	bottom:$overlay-margin;
+	left:$overlay-margin;
+	right:$overlay-margin;
+	background:white;
+	z-index:10000;
+	border-radius:$overlay-radius;
+	box-shadow:3px 3px 4px rgba(black,0.2);
+	border:1px solid #dedede;
+}
+
+.al-overlay-header {
+	padding:10px;
+	height:$overlay-header-height;
+	border-bottom:1px solid #efefef;
+	h3 {margin:0;}
+}
+
+.al-overlay-close {
+	position:absolute;
+	top:6px; right:6px;
+}
+
+.al-media-selector-left,
+.al-media-selector-right {
+	padding:15px;
+}
+.al-media-selector-left {
+	background:#efefef;
+	height:calc(100vh - #{$overlay-margin*2 + $overlay-header-height + 2px});
+	overflow-y: scroll;
+}
+
+
+.al-media-objects {
+	width:100%;
+	display:flex;
+	flex-flow:wrap row;
+	height:auto;
+}
+
+.al-media-object {
+	padding:$media-thumb-padding;
+	position:relative;
+	flex: 0 0 $media-thumb-width-lg;
+	@media screen and(max-width:map-get($breakpoints, large)) {
+		flex: 0 0 $media-thumb-width-md;
+	}
+	@media screen and(max-width:map-get($breakpoints, medium)) {
+		flex: 0 0 $media-thumb-width-sm;
+	}
+}
+
+
+.al-media-object.is-selected {
+	.al-media-object-image img {
+		transform:scale(0.85);
+	}
+	.al-media-select svg {
+		fill: $success-color;
+		background-color:white;
+	}
+}
+
+.al-media-select {
+	position:absolute;
+	top:0px; right:0px;
+	z-index:10;
+	svg {
+		fill: #ababab;
+	}
+}
+
+.al-media-loader {
+	position:absolute;
+	top:calc(50% - 15px);
+	left:calc(50% - 15px);
+	svg {fill:gray;}
+}
+
+.al-media-object-image {
+	box-shadow:1px 1px 1px rgba(black,0.2);
+	background:$media-thumb-loading-bg;
+	img {
+		transition:all 150ms;
+		width:100%;
+	}
+}
+
+.al-media-overlay {
+	position:absolute;
+	top:$media-thumb-padding;
+	left:$media-thumb-padding;
+	right:$media-thumb-padding;
+	bottom:$media-thumb-padding;
+}
+.al-media-overlay-actions {
+	position:absolute;
+	bottom:0; left:0; right:0;
+	top: 50%;
+	//background:$bg-falloff;
+	transition:all 200ms;
+	opacity:0;
+}
+.al-media-object:hover {
+	.al-media-overlay-actions {opacity:1;}
+}
+
+.is-loading .al-media-object-image {
+	background:#efefef;
+	padding-bottom:75%;
+}
+
+.is-spinning {
+	animation:loading 350ms infinite linear;
+}

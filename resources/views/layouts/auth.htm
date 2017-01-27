@@ -6,9 +6,12 @@
 	{{=data.styles}}
 </head>
 <body>
-<main id="Ashlee-app" class="row align-center">
-	<div class="column small-12 medium-8 large-6">
-		@yield(content)
+<main id="Ashlee-app" class="row" data-layout="login">
+	<div class="al-login-left column medium-4">
+		@yield(form)
+	</div>
+	<div class="al-login-right column medium-8">
+		@yield(messaging)
 	</div>
 </main>
 

@@ -1,3 +1,15 @@
+.is-line-input {
+	border-radius:0;
+	box-shadow:none;
+	border:none;
+	border-bottom:1px solid #cacaca;
+	&:focus {
+		border:none;
+		border-bottom:1px solid #535353;
+		box-shadow:none;
+	}
+}
+
 .al-input {
 	width:100%;
 	position:relative;
@@ -53,4 +65,17 @@
 .al-input-component-slot {
 	padding:10px;
 	border-bottom: 1px solid #efefef;
+}
+
+
+.al-component-slot__name {
+	input {
+		font-weight:700;
+	}
+}
+
+.al-color-swatch {
+	display:block;
+	border-radius: 50%;
+	width:30px; height:30px;
 }

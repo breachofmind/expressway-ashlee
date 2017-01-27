@@ -1,5 +1,5 @@
-// Stylesheets
-require('../scss/ashlee.scss');
+require('./styles');
+
 
 var Vue         = require('vue');
 var VueRouter   = require('vue-router');
@@ -15,6 +15,7 @@ var componentMap = {
     "icon"                  : 'icon.vue',
     "modal"                 : 'modal.vue',
     "snackbar"              : 'snackbar.vue',
+    "overlay"               : 'overlay.vue',
     "nav-link"              : 'nav-link.vue',
     "dropdown-menu"         : "dropdown-menu.vue",
     "layout-sidebar"        : "views/layout/sidebar.vue",

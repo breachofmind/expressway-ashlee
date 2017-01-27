@@ -6,11 +6,12 @@
 	{{= data.styles}}
 </head>
 <body>
-	<main id="Ashlee-app">
+	<main id="Ashlee-app" data-layout="main">
 		@yield(content)
 
 		<modal></modal>
 		<snackbar></snackbar>
+		<overlay></overlay>
 	</main>
 
 	{{= data.scripts}}

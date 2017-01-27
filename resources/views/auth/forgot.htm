@@ -1,22 +1,26 @@
 @extends(layouts/auth)
 
-@section(content)
+@section(form)
 
+<header class="al-login-header" slot="header">
     <h1>Forgot Password</h1>
+</header>
 
-    @component(FlashMessage, data.message)
+<form action="/auth/login/reset" method="POST">
 
-    <form action="/auth/login/reset" method="POST">
+    <div class="al-login-username">
+        <label for="Input_username">Username</label>
+        <input type="text" class="al-login-input" name="username" id="Input_username" required>
+    </div>
 
-        <label for="Username">Username
-            <input type="text" name="username" id="Username">
-        </label>
+    <div class="al-login-submit">
+        <button type="submit" class="button expanded">Reset Password</button>
+    </div>
 
-        <input type="hidden" name="_csrf" value="{{= data.$request.csrfToken() }}">
-
-        <button type="submit" class="button success">Reset Password</button>
-
-        <a href="/auth/login" class="button hollow">Back to Login</a>
-    </form>
+    <div class="al-login-links button-group">
+        <a href="/" class="button link">Back to Site</a>
+        <a href="/auth/login" class="button link">Back to Login</a>
+    </div>
+</form>
 
 @endsection

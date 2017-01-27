@@ -4,10 +4,15 @@
 			<label :for="inputId">{{field.label}}</label>
 		</div>
 		<div class="al-input-component-slot-group column small-12">
-			<div class="al-input-component-slot" v-for="(slot,index) in value">
-				<component-slot-header :options="slot" :index="index" @delete="removeSlot(index)"></component-slot-header>
-				<component :is="slot.component" :options="slot" :index="index"></component>
+			<div class="al-input-component-slot row" v-for="(slot,index) in value">
+				<div class="al-input-label column">
+					<component-slot-header :options="slot" :index="index" @delete="removeSlot(index)"></component-slot-header>
+				</div>
+				<div class="al-input-field column">
+					<component :is="slot.component" :options="slot" :index="index"></component>
+				</div>
 			</div>
+
 			<div class="al-input-actions text-center">
 				<button class="button link has-icon" @click.prevent="addSlot()">
 					<icon type="create"></icon>

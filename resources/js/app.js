@@ -8,11 +8,22 @@ var app = new Vue({
     el :"#Ashlee-app",
     created()
     {
-        this.$store.commit('getState', this.$api.state());
+        if (document.getElementById("Ashlee-app").getAttribute('data-layout') !== "login") {
+            this.$store.commit('getState', this.$api.state());
+        }
     },
     computed: {
         loaded() {
             return ! this.$store.state.loading;
         }
+    },
+    components: {
+        "ashlee-login-form" : require('../vue/forms/login.vue')
     }
 });
+
+if (module.hot) {
+    module.hot.accept(function(err) {
+        window.location.reload();
+    });
+}

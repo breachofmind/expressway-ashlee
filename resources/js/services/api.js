@@ -114,6 +114,16 @@ class APIResource
     }
 
     /**
+     * Login in to the system.
+     * @param credentials
+     * @returns {Promise}
+     */
+    login(credentials)
+    {
+        return this.post("auth", credentials);
+    }
+
+    /**
      * Get a resource by name or id.
      * @param slug string
      * @param id
