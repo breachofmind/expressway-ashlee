@@ -114,3 +114,10 @@ $easeOutExpo: cubic-bezier(0.19, 1, 0.22, 1);
 		}
 	}
 }
+
+.al-td[data-col="url"] span {
+	font-family:monospace;
+	display:inline-block;
+	background: #e4e8ef;
+	padding:2px 4px;
+}

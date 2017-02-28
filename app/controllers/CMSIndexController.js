@@ -47,12 +47,10 @@ class CMSIndexController extends Controller
             user: currentUser,
             objects:[],
             groups: [],
-            components:[]
+            components:components.each(object => {
+                return object.toJSON()
+            })
         };
-        components.each(object => {
-            json.components.push(object.toJSON());
-        });
-
         app.models.each(model =>
         {
             // Only deliver objects the user can view.

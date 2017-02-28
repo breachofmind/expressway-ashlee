@@ -4,7 +4,7 @@ console.log('Ashlee is connected');
     function main()
     {
         var templateId = $('meta[name="templateId"]').attr('content');
-        var url = "/template/"+templateId+"/slot";
+        var url = "/cms/template/"+templateId+"/modify";
 
         $('[data-ashlee]').each(function(i,el)
         {

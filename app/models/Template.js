@@ -61,6 +61,11 @@ class Template extends Model
         {
             let template = this;
 
+            // Just in case no controller was given.
+            if (! template.controller || template.controller == "") {
+                template.controller = "TemplateController.default";
+            }
+
             // Closure for a middleware function.
             function templateLoader (id)
             {
@@ -72,9 +77,12 @@ class Template extends Model
                         response.view.use('template', template);
                         response.view.meta('templateId', template.id);
 
-                        components.render(request,response,next,template.slots).then(rendered => {
+                        // Render each component and attach to the response view data.
+                        components.render(request,template.slots).then(rendered => {
                             response.view.use('cmp', rendered);
-                            next();
+                            return next();
+                        }).catch(err => {
+                            return next(err);
                         });
                     })
                 }

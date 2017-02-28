@@ -14,14 +14,12 @@ class HTMLBlock extends Component
 
     /**
      * Render the component.
-     * @param done Function
-     * @param request IncomingMessage
-     * @param response ServerResponse
-     * @param next Function
+     * @param done {Function}
+     * @param request {IncomingMessage}
      * @param data {Object}
      * @returns {String}
      */
-    render(done,request,response,next,data)
+    render(done,request,data)
     {
         var attr = {"id": data.id, "class": data.classes};
         if (request.user) {

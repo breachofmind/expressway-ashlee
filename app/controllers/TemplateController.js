@@ -7,6 +7,13 @@ class TemplateController extends Controller
         return "Handles all CMS-defined templates"
     }
 
+    constructor(app)
+    {
+        super(app);
+
+        this.middleware('default', 'AshleeFrontend');
+    }
+
     /**
      * Return the default view.
      * @returns {View}
@@ -18,7 +25,7 @@ class TemplateController extends Controller
 
     /**
      * Modify a template slot.
-     * @returns {Promise<R>|*|Promise.<TResult>|Promise<R2|R1>}
+     * POST /cms/template/:id/modify
      */
     modify(request,response,next,Template)
     {

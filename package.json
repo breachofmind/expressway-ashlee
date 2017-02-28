@@ -23,30 +23,36 @@
     "url": "https://github.com/breachofmind/expressway-ashlee/issues"
   },
   "homepage": "https://github.com/breachofmind/expressway-ashlee#readme",
+  "babel": {
+    "presets": [
+      "babel-preset-es2015"
+    ],
+    "ignore": [
+      "node_modules/*"
+    ]
+  },
   "dependencies": {
     "axios": "^0.15.3",
     "foundation-sites": "^6.3.0-rc2",
-    "sharp": "^0.17.1",
+    "grenade": "^0.1.1",
+    "sharp": "^0.17.2",
     "vue": "^2.1.4",
     "vue-router": "^2.1.1",
     "vue2-ace-editor": "^0.0.2",
     "vuex": "^2.0.0"
   },
   "devDependencies": {
-    "autoprefixer": "^6.5.3",
     "babel-core": "^6.18.2",
     "babel-loader": "^6.2.9",
     "babel-preset-es2015": "^6.18.0",
     "css-loader": "^0.26.1",
-    "extract-text-webpack-plugin": "^1.0.1",
     "node-sass": "^3.13.0",
     "postcss-loader": "^1.2.0",
     "sass-loader": "^4.0.2",
     "style-loader": "^0.13.1",
     "vue-loader": "^10.0.2",
     "vue-template-compiler": "^2.1.4",
-    "webpack": "^1.13.3",
-    "webpack-dev-middleware": "^1.8.4",
-    "webpack-hot-middleware": "^2.13.2"
+    "webpack": "^2.2.1",
+    "webpack-dev-server": "^2.3.0"
   }
 }

@@ -5,10 +5,10 @@ const LABELS = {
     title: "Title",
     author:"Author",
     slug: "Slug",
-    published_at: "Publish Date",
     publish: "Publish",
-    contents:"Contents",
+    content:"Content",
     excerpt: "Excerpt",
+    published_at: "Publish Date",
 };
 
 class Post extends Model
@@ -22,7 +22,8 @@ class Post extends Model
         this.icon    = 'communication.email';
         this.sort    = -1;
         this.key     = "published_at";
-        this.managed = 'author';
+        this.managed = "author";
+        this.link    = "/posts/{slug}";
     }
 
     /**
@@ -38,9 +39,9 @@ class Post extends Model
             .add('title',        types.Title)
             .add('author',       types.User, 'display', {required:false})
             .add('excerpt',      types.Text, 'fillable','display')
-            .add('contents',     types.Text)
-            .add('publish',      types.Boolean, {default:false})
-            .add('published_at', types.Timestamp)
+            .add('content',      types.Text, 'fillable')
+            .add('publish',      types.Boolean, {default:false}, 'fillable')
+            .add('published_at', types.Timestamp, 'fillable', 'display')
             .labels(LABELS);
     }
 }

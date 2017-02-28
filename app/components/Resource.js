@@ -15,50 +15,64 @@ class Resource extends Component
 
     /**
      * Render the component.
-     * @param done Function
-     * @param request IncomingMessage
-     * @param response ServerResponse
-     * @param next Function
+     * @param done {Function}
+     * @param request {IncomingMessage}
      * @param data {Object}
      * @returns {String}
      */
-    render(done,request,response,next,data)
+    render(done,request,data,config)
     {
         let {model,filter,template} = data;
 
         let Model = this.app.models.get(model);
 
-        let filterName = Model.primaryKey;
-        let filterValue = filter;
-
-        // The parameter is part of the URL request.
-        if (filter.startsWith(":")) {
-            filterName = _.trimStart(filter,":");
-            filterValue = request.params[filterName];
-        } else if (filter.startsWith("?")) {
-            filterName = _.trimStart(filter,"?");
-            filterValue = request.query[filterName];
-        }
-
-        // If we're using an ID parameter, it should equal the model's primaryKey attribute.
-        if (filterName == "id") filterName = Model.primaryKey;
-
         // Get the resource and render the template.
-        Model.first({[filterName] : filterValue}).then(resource => {
-
+        Model.first(getFilterObject(Model,request,filter)).then(resource =>
+        {
+            // The resource wasn't found, halt the execution.
             if (! resource) {
-                return response.smart(404);
+                done(new NotFoundException(`resource not found: ${Model.slug}`, null));
             }
             if (template) {
-                return app.root.render(template, {model: resource}).then(html =>
-                {
+                return this.app.root.render(template, {model: resource}).then(html => {
                     return done(html);
                 });
             }
 
             return done(resource);
+
+        }).catch(err => {
+            done(new NotFoundException("database error: "+err.message, err));
         });
     }
+}
+
+/**
+ * Figures out the Model request filter
+ * based on the request parameters and configuration.
+ * @param Model {Model}
+ * @param request {IncomingMessage}
+ * @param filter {String}
+ * @returns {{}}
+ */
+function getFilterObject(Model,request,filter)
+{
+    let filterName = Model.primaryKey;
+    let filterValue = filter;
+
+    // The parameter is part of the URL request.
+    if (filter.startsWith(":")) {
+        filterName = _.trimStart(filter,":");
+        filterValue = request.params[filterName];
+    } else if (filter.startsWith("?")) {
+        filterName = _.trimStart(filter,"?");
+        filterValue = request.query[filterName];
+    }
+
+    // If we're using an ID parameter, it should equal the model's primaryKey attribute.
+    if (filterName == "id") filterName = Model.primaryKey;
+
+    return {[filterName] : filterValue};
 }
 
 module.exports = Resource;

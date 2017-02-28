@@ -7,7 +7,11 @@ window.ashlee = {
     components: {
         add(name, fn)
         {
-            return components[name] = fn;
+            var func = fn;
+            if (typeof fn !== 'function') {
+                func = function callback(Vue) { return fn; };
+            }
+            return components[name] = func;
         },
         toArray()
         {
@@ -20,6 +24,13 @@ window.ashlee = {
             return this.toArray().map(cmp => {
                 return callback(cmp.name,cmp.fn);
             })
+        },
+        load(Vue)
+        {
+            this.each((name,fn) => {
+                var cmp = fn.call(fn,Vue);
+                Vue.component(name, cmp);
+            });
         }
     },
 
@@ -37,4 +48,4 @@ window.ashlee = {
     }
 };
 
-require('./services/components');
+module.exports = window.ashlee;

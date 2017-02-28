@@ -24,33 +24,32 @@ module.exports = function(app,debug)
          * Given the request and component object data,
          * render each component instance and return a promise.
          * @param request IncomingMessage
-         * @param response ServerResponse
-         * @param next Function
          * @param objectArray {Array}
-         * @param template Model
-         * @returns {Promise<R>|Promise.<TResult>|Promise<R2|R1>}
+         * @returns {Promise}
          */
-        render(request,response,next,objectArray=[])
+        render(request,objectArray=[])
         {
             let promises = objectArray.map((object,index) =>
             {
                 let component = this.get(object.component);
 
-                return new Promise(done => {
+                return new Promise(resolve => {
                     object.index = index;
-                    component.render(done,request,response,next,object);
+                    app.call(component,'render', [resolve,request,object]);
 
                 }).then(returnResult => {
+                    if (returnResult instanceof Error || returnResult instanceof ApplicationCallError) {
+                        throw returnResult;
+                    }
                     // Result could be html text or object.
-                    return {[object.name]: returnResult}
+                    return {[object.name]: returnResult};
                 });
             });
 
             // Return the rendered component object.
-            return Promise.all(promises).then(rendered =>
-            {
+            return Promise.all(promises).then(rendered => {
                 return _.assign({}, ...rendered);
-            })
+            });
         }
 
         /**

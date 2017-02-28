@@ -1,6 +1,8 @@
+"use strict";
+
 require('./styles');
 
-
+var ashlee      = window.ashlee;
 var Vue         = require('vue');
 var VueRouter   = require('vue-router');
 var Vuex        = require('vuex');
@@ -9,6 +11,7 @@ var VueAPI      = require('./services/api');
 Vue.use(VueRouter);
 Vue.use(Vuex);
 Vue.use(VueAPI);
+
 
 // Components
 var componentMap = {
@@ -25,9 +28,11 @@ var componentMap = {
     "component-slot-header" : "forms/component-slot-header.vue",
 };
 
-Object.keys(componentMap).forEach(key => {
-    Vue.component(key, require('../vue/'+componentMap[key]));
-});
+// Core component slot objects.
+var coreComponents = [
+    'HTMLBlock',
+    'Resource'
+];
 
 // Input components
 var inputTypes = [
@@ -41,18 +46,34 @@ var inputTypes = [
     'Number',
     'ComponentSlots',
 ];
-inputTypes.forEach(type => {
-    Vue.component('Input'+type, require('../vue/inputs/'+type+".vue"));
-});
 
-// Create custom component slot components.
-window.ashlee.components.each((name,fn) =>
+/**
+ * Bootstraps the Vue application.
+ * @returns void
+ */
+function bootstrap()
 {
-    var obj = fn.call(fn,Vue);
-    obj.props = ['options','index'];
-    obj.name = name;
-    Vue.component(name, obj);
-});
+    // Add the core components.
+    coreComponents.forEach(componentName => {
+        ashlee.components.add(componentName, require(`../../app/components/${componentName}.vue`));
+    });
+
+    // Load CMS components.
+    Object.keys(componentMap).forEach(key => {
+        Vue.component(key, require('../vue/'+componentMap[key]));
+    });
+
+    // Load CMS Input components.
+    inputTypes.forEach(type => {
+        Vue.component('Input'+type, require('../vue/inputs/'+type+".vue"));
+    });
+
+    // Create custom component slot components.
+    ashlee.components.load(Vue);
+}
+
+
+bootstrap();
 
 require('./app');
 

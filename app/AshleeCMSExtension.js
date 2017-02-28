@@ -4,15 +4,9 @@ var Extension = require('expressway').Extension;
 var path = require('path');
 var Component = require('./Component');
 
-/**
- * The unchanging static file path.
- * @type {string}
- */
-const STATIC_PATH = "/static/";
-
 class AshleeCMSExtension extends Extension
 {
-    constructor(app,paths,locale,config)
+    constructor(app,paths,config)
     {
         super(app);
 
@@ -22,19 +16,7 @@ class AshleeCMSExtension extends Extension
         this.logo    = config('cms.logo', "http://dev.brightstarus.com/brightstar-logo.svg");
         this.package = require('../package.json');
 
-        app.use([
-            require('expressway-rest'),
-            require('expressway/src/middlewares/Development'),
-            require('./providers/AshleeCoreProvider'),
-            require('./providers/GraphicsProvider'),
-            require('./providers/CustomObjectProvider'),
-            require('./providers/AshleePoliciesProvider'),
-            require('./models'),
-            require('./middlewares/AshleeFrontend'),
-            require('./middlewares/AshleeNotFound'),
-            require('./controllers/CMSIndexController'),
-            require('./controllers/TemplateController'),
-        ]);
+        app.use(require('../config/modules'));
 
         this.use(require('grenade/expressway'), {
             extension: 'htm',
@@ -44,48 +26,9 @@ class AshleeCMSExtension extends Extension
             enableCache: app.env == ENV_PROD
         });
 
-        app.call(this,'configureRoutes');
+        this.routes.use(require('../config/routes'));
     }
 
-    /**
-     * Configure the CMS routes.
-     * @param paths
-     */
-    configureRoutes(paths)
-    {
-        this.routes.static(STATIC_PATH, paths.cms_public());
-
-        this.routes.middleware([
-            'Development',
-            'Static',
-            'Init',
-            'ConsoleLogging',
-            'Ajax',
-            'Localization',
-            'BodyParser',
-            'Session',
-            'BasicAuth',
-            'Flash',
-            'AuthRequired'
-        ]);
-
-        this.routes.add([
-            {
-                'GET /'        : 'CMSIndexController.index',
-                'POST /_state' : 'CMSIndexController.state',
-            }
-        ]);
-
-        this.routes.error(404, 'AshleeNotFound');
-
-        this.use('expressway/src/services/WebpackService');
-        this.webpack.resourcePath = paths.cms_resources();
-        this.webpack.readPackage(this.package);
-        this.webpack.entry('base.js');
-        this.webpack.entry('main.js');
-        this.webpack.publicPath = this.base + STATIC_PATH;
-        this.webpack.hmr = this.base + "/";
-    }
 
     /**
      * Boot method.
@@ -94,22 +37,37 @@ class AshleeCMSExtension extends Extension
      * @param app Application
      * @param url URLService
      * @param components ComponentService
+     * @param paths PathService
      */
-    boot(next,app,url,components)
+    boot(next,app,url,components,paths)
     {
-        app.root.routes.after('BasicAuth', 'AshleeFrontend');
+        this.webpack.context = paths.cms_root();
+        this.webpack.publicPath = this.base + this.routes.statics[0].uri;
+        this.webpack.resourcePath = paths.cms_resources();
+        this.webpack.read(this.package);
+        this.webpack.entry('base.js');
+        this.webpack.entry('main.js');
 
-        components.add(require('./components/HTMLBlock'));
-        components.add(require('./components/Resource'));
+        components.add([
+            require('./components/HTMLBlock'),
+            require('./components/Resource')
+        ]);
 
-        app.call(this,'setupExtensions');
+        app.call(this,'bootExtensions');
 
         url.extend('cms', this.base);
 
         // Add the installation seeder.
         app.load(require('./db/installer'));
 
-        super.boot(next);
+        // If this is installed as a module, we're not developing it.
+        if (/node_modules/.test(__dirname)) {
+            return super.boot(next);
+        } else {
+            this.webpack.server().then(result => {
+                super.boot(next);
+            });
+        }
     }
 
     /**
@@ -120,9 +78,9 @@ class AshleeCMSExtension extends Extension
      * @param api Extension
      * @param auth Extension
      * @param controller Function
-     * @param devMiddleware Middleware
+     * @param livereload LivereloadService
      */
-    setupExtensions(app,paths,api,auth,controller,devMiddleware)
+    bootExtensions(app,paths,api,auth,controller,livereload)
     {
         api.auth            = true;
         auth.successUri     = this.base;
@@ -134,13 +92,13 @@ class AshleeCMSExtension extends Extension
         let viewDefaults = (view) => {
             view.use('cmsVersion', this.package.version);
             view.meta('generator', 'Expressway Ashlee CMS v.'+this.package.version);
-            this.webpack.loadBundles(view);
+            this.webpack.attach(view);
         };
 
         controller('AuthController').defaults.push(viewDefaults);
         controller('CMSIndexController').defaults.push(viewDefaults);
 
-        devMiddleware.watch(paths.cms_views());
+        livereload.watch(paths.cms_views());
     }
 }
 
