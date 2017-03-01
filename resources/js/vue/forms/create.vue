@@ -22,9 +22,13 @@
 
 <script>
     var SUBMIT_TIMEOUT = 800;
+
 	module.exports = {
+
 		name: "CreateForm",
+
         props:['options','input'],
+
 		data: function() {
 		    return {
 		        submitting: false,

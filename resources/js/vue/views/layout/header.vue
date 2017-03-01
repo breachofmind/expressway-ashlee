@@ -29,7 +29,7 @@
         name:"Header",
 	    props:['logo'],
 		components: {
-            'current-user' : require('../../current-user.vue'),
+            'current-user' : require('./current-user.vue'),
 		}
 	}
 </script>

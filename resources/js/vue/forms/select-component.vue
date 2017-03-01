@@ -16,8 +16,11 @@
 
 <script>
 	module.exports = {
+
 		name: "SelectComponent",
+
         props:['options','input'],
+
 		created() {
 		    this.input.component = "";
 		},

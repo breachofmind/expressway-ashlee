@@ -19,7 +19,7 @@
 	var timer;
 
 	module.exports = {
-	    name: "snackbar",
+	    name: "Snackbar",
 	    data() {
 	        return {
 	            visible: false,

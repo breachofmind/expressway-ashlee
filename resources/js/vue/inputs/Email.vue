@@ -10,24 +10,22 @@
 					v-model="record[field.name]"
 					:required="field.required"
 					:name="field.name"
-					type="checkbox"
+					type="email"
 			>
 		</div>
 	</div>
 
 	<div v-else>
-		<span>{{displayValue}}</span>
+		<router-link v-if="isTitle" :to="link">{{value}}</router-link>
+		<a v-else :href="'mailto:'+value">{{value}}</a>
 	</div>
 </template>
 
 <script>
 module.exports = {
+
+    name: "EmailInput",
+
     mixins: [require('./_mixin')],
-    name: "BooleanInput",
-	computed: {
-        displayValue() {
-            return this.value ? "True" : "False"
-        }
-	}
 }
 </script>

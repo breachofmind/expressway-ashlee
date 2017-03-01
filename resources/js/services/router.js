@@ -8,9 +8,9 @@ var routes = ashlee.routes.each((path,fn) => {
     }
 
 }).concat([
-    {path: "/",           component: require('../../vue/views/home.vue'), name:"home"},
-    {path: "/:model",     component: require('../../vue/views/list.vue'), name:"list"},
-    {path: "/:model/:id", component: require('../../vue/views/edit.vue'), name:"edit"},
+    {path: "/",           component: require('../vue/views/home.vue'), name:"home"},
+    {path: "/:model",     component: require('../vue/views/list.vue'), name:"list"},
+    {path: "/:model/:id", component: require('../vue/views/edit.vue'), name:"edit"},
 ]);
 
 

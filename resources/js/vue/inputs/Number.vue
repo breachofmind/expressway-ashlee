@@ -10,21 +10,23 @@
 					v-model="record[field.name]"
 					:required="field.required"
 					:name="field.name"
-					type="email"
+					@change="$emit('change')"
+					type="number"
 			>
 		</div>
 	</div>
 
 	<div v-else>
-		<router-link v-if="isTitle" :to="link">{{value}}</router-link>
-		<a v-else :href="'mailto:'+value">{{value}}</a>
+		<span>{{value}}</span>
 	</div>
-
 </template>
 
 <script>
 module.exports = {
+
+    name: "NumberInput",
+
     mixins: [require('./_mixin')],
-    name: "EmailInput",
+
 }
 </script>

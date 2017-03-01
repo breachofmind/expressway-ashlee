@@ -6,7 +6,9 @@
 
 <script>
 	module.exports = {
-        name:"cms-table-cell",
+
+        name:"CMSTableCell",
+
         props:['record','field','column','definition'],
 	}
 </script>

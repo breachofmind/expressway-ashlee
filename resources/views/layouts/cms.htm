@@ -4,11 +4,15 @@
 	<title>Ashlee CMS : {{data.title}}</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="initial-scale=1, maximum-scale=1">
+	<base href="/cms/">
 	{{= data.meta}}
 	{{= data.styles}}
 </head>
 <body>
 	<main id="Ashlee-app" data-layout="main">
+
+		<style>{{= data.globalStyles}}</style>
+
 		@yield(content)
 
 		<modal></modal>

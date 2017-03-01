@@ -60,12 +60,12 @@ function bootstrap()
 
     // Load CMS components.
     Object.keys(componentMap).forEach(key => {
-        Vue.component(key, require('../vue/'+componentMap[key]));
+        Vue.component(key, require('./vue/'+componentMap[key]));
     });
 
     // Load CMS Input components.
     inputTypes.forEach(type => {
-        Vue.component('Input'+type, require('../vue/inputs/'+type+".vue"));
+        Vue.component('Input'+type, require('./vue/inputs/'+type+".vue"));
     });
 
     // Create custom component slot components.

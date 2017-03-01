@@ -17,14 +17,18 @@
     var SUBMIT_TIMEOUT = 800;
 
 	module.exports = {
+
 		name: "EditForm",
+
         props:['options','input'],
+
 		data: function() {
 		    return {
 		        submitting: false,
 			    dirty: false,
 		    }
 		},
+
 		computed: {
 		    model() {
 		        return this.options.model;

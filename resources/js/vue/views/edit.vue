@@ -42,7 +42,9 @@
 	var LOAD_TIMEOUT = 300;
 
 	module.exports = {
+
 		name:"EditView",
+
 		data() {
 		    return {
 		        loading: true,
@@ -85,15 +87,15 @@
 
 		        this.saving = true;
 
-		        setTimeout(() => {
+		        window.setTimeout(() => {
                     this.$api.put([this.model.slug, this.record.id], this.getFieldValues()).then(response =>
-                    {
+					{
                         this.$snack.success('Updated!');
 
                     }).catch(this.$api.errorHandler()).then(() => {
                         this.saving = false;
                     });
-		        }, UPDATE_TIMEOUT)
+		        }, UPDATE_TIMEOUT);
 
 		    },
 		    getFieldValues()

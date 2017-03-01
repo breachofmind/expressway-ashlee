@@ -6,8 +6,11 @@
 
 <script>
 	module.exports = {
-	    name:"cms-table-heading",
+
+	    name:"CMSTableHeading",
+
 		props:['field','column','definition'],
+
 		computed: {
             isSorting() {
 	            return this.$parent.searchParams.sort.hasOwnProperty(this.field.name);

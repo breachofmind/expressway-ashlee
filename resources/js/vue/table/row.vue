@@ -27,8 +27,11 @@
 
 <script>
 	module.exports = {
-	    name:"cms-table-row",
+
+	    name:"CMSTableRow",
+
 		props:['record','index','definition'],
+
 		computed: {
 	        fields() {
 	            return this.$parent.fields;
@@ -44,6 +47,10 @@
 			}
 		},
 		methods: {
+
+            /**
+             * Delete a record in the table.
+             */
 		    deleteRecord()
 		    {
 		        var id = this.record.id;

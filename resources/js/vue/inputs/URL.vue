@@ -10,28 +10,27 @@
 					v-model="record[field.name]"
 					:required="field.required"
 					:name="field.name"
-					type="password"
+					@change="$emit('change')"
+					type="text"
 			>
 		</div>
 	</div>
 
 	<div v-else>
-		<span>***</span>
+		<router-link v-if="isTitle" :to="link">{{value}}</router-link>
+		<div v-else>
+			<a :href="value" target="_blank"><icon type="link" class="is-inline"></icon></a>
+			<span>{{value}}</span>
+		</div>
 	</div>
 </template>
 
 <script>
-var PASSWORD_REGEX = "^([0-9a-zA-Z!@#$%^&*()_+-=?~]+)$";
-var PASSWORD_MIN = 6;
-var PASSWORD_MAX = 14;
-
 module.exports = {
+
+    name: "URLInput",
+
     mixins: [require('./_mixin')],
-    name: "PasswordInput",
-	computed: {
-        value() {
-            return "";
-        }
-	}
+
 }
 </script>

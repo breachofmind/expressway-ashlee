@@ -29,9 +29,18 @@
 
 <script>
 module.exports = {
-    mixins: [require('./_mixin')],
+
     name: "ComponentSlotsInput",
+
+    mixins: [require('./_mixin')],
+
 	methods: {
+
+        /**
+         * Action when adding a component slot.
+         * Opens a modal that allows user to select a component.
+         * @returns void
+         */
         addSlot()
         {
             var cmp = this;
@@ -54,8 +63,12 @@ module.exports = {
 					}
 				}]
 			});
-
         },
+
+        /**
+         * Action for removing a slot.
+         * @param index {Number}
+         */
 		removeSlot(index)
 		{
 		    this.record[this.field.name].splice(index,1);

@@ -10,24 +10,37 @@
 					v-model="record[field.name]"
 					:required="field.required"
 					:name="field.name"
-					@change="$emit('change')"
+					@change="changeInput()"
 					type="text"
+			        :placeholder="field.default"
 			>
 		</div>
 	</div>
 
 	<div v-else>
 		<router-link v-if="isTitle" :to="link">{{value}}</router-link>
-		<div v-else>
-			<a :href="value" target="_blank"><icon type="link" class="is-inline"></icon></a>
-			<span>{{value}}</span>
-		</div>
+		<span v-else>{{value}}</span>
 	</div>
 </template>
 
 <script>
 module.exports = {
+
+    name: "TextInput",
+
     mixins: [require('./_mixin')],
-    name: "URLInput",
-}
+
+	created()
+	{
+	    if (this.editing && ! this.value) {
+	        this.value = this.field.default;
+	    }
+	},
+	methods: {
+        changeInput()
+        {
+            this.$emit('change', this);
+        }
+	}
+};
 </script>

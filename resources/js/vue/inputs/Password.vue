@@ -10,20 +10,31 @@
 					v-model="record[field.name]"
 					:required="field.required"
 					:name="field.name"
-					@change="$emit('change')"
-					type="number"
+					type="password"
 			>
 		</div>
 	</div>
 
 	<div v-else>
-		<span>{{value}}</span>
+		<span>***</span>
 	</div>
 </template>
 
 <script>
+var PASSWORD_REGEX = "^([0-9a-zA-Z!@#$%^&*()_+-=?~]+)$";
+var PASSWORD_MIN = 6;
+var PASSWORD_MAX = 14;
+
 module.exports = {
+
+    name: "PasswordInput",
+
     mixins: [require('./_mixin')],
-    name: "NumberInput",
+
+	computed: {
+        value() {
+            return "";
+        }
+	}
 }
 </script>

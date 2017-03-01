@@ -24,13 +24,20 @@
 <script>
 module.exports = {
     name: "ComponentSlotHeader",
+
 	props: ['options','index'],
+
 	created()
 	{
 	    if (! this.options.name) this.options.name = "component_"+this.index;
 	},
 	methods: {
-		clickDelete()
+
+        /**
+         * Action to perform when delete is clicked.
+         * @returns void
+         */
+        clickDelete()
 		{
 		    this.$emit('delete');
 		}

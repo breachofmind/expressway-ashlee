@@ -10,34 +10,24 @@
 					v-model="record[field.name]"
 					:required="field.required"
 					:name="field.name"
-					@change="changeInput()"
-					type="text"
-			        :placeholder="field.default"
+					type="checkbox"
 			>
 		</div>
 	</div>
 
 	<div v-else>
-		<router-link v-if="isTitle" :to="link">{{value}}</router-link>
-		<span v-else>{{value}}</span>
+		<icon :name="displayIcon"></icon>
 	</div>
 </template>
 
 <script>
 module.exports = {
     mixins: [require('./_mixin')],
-    name: "TextInput",
-	created()
-	{
-	    if (this.editing && ! this.value) {
-	        this.value = this.field.default;
-	    }
-	},
-	methods: {
-        changeInput()
-        {
-            this.$emit('change', this);
+    name: "BooleanInput",
+	computed: {
+        displayIcon() {
+            return this.value ? "toggle.check_box" : "toggle.check_box_outline_blank";
         }
 	}
-};
+}
 </script>

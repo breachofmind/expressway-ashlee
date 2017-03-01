@@ -15,10 +15,10 @@ var app = new Vue({
     computed: {
         loaded() {
             return ! this.$store.state.loading;
-        }
+        },
     },
     components: {
-        "ashlee-login-form" : require('../vue/forms/login.vue')
+        "ashlee-login-form" : require('./vue/forms/login.vue')
     }
 });
 

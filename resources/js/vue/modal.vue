@@ -36,8 +36,10 @@
 
 <script>
 	var Vue = require('vue');
-	var Action = require('../js/utils/modal-actions');
+	var Action = require('../utils/modal-actions');
 	var ANIMATION_TIMEOUT = 500;
+
+	// Form names.
 	var FORMS = {
 	    "new" : function(object) {
 	        return {
@@ -51,6 +53,9 @@
 	};
 
 	module.exports = {
+
+	    name: "Modal",
+
 		data() {
 	        return {
                 visible: false,
@@ -61,9 +66,19 @@
 	        }
 		},
 		computed: {
+
+	        /**
+	         * Return the buttons from the arguments or just the default button.
+	         * @returns {Array}
+	         */
 	        buttons() {
 	            return this.args.buttons || [Action.OK];
 	        },
+
+			/**
+			 * Return the class names for the modal container.
+			 * @returns {Object}
+			 */
 			classes() {
 	            var out = {
 	                loading: this.loading,
@@ -71,33 +86,68 @@
 	            if (this.args.type) out[this.args.type] = true;
 	            return out;
 			},
+
+			/**
+			 * Return the component instance.
+			 */
 			$cmp() {
 	            return this;
 			}
 		},
 
+		/**
+		 * Mount the component to the Vue instance.
+		 */
 		created()
 		{
             Vue.prototype.$modal = this;
 		},
 
 		methods: {
+
+            /**
+             * Open the modal window.
+             * @param args
+             */
 		    open(args) {
 		        this.$emit('open');
 		        this.visible = true;
 		        this.args = args || {};
 		    },
+
+            /**
+             * Close the modal window.
+             * @param $event
+             */
 	        close($event) {
 	            this.$emit('close', this.input);
 	            this.reset();
 	        },
+
+            /**
+             * Submit the modal window.
+             * @param $event
+             */
 			submit($event) {
 	            this.$emit('submit', this.input);
                 this.reset();
 			},
+
+            /**
+             * Open the modal window with an alert message.
+             * @param message {String}
+             * @returns {*}
+             */
 			alert(message) {
 			    return this.open({title:"There was an error", message:message, type:"alert"});
 			},
+
+            /**
+             * Open the modal window with remote content.
+             * @param title {String}
+             * @param url {String}
+             * @returns {*}
+             */
 			remote(title, url)
 			{
 			    return this.open({
@@ -106,11 +156,23 @@
 				    options: {url:url}
 			    });
 			},
+
+            /**
+             * Open the modal with a form component.
+             * @param type {String}
+             * @param objectName {String}
+             * @returns void
+             */
 			form(type,objectName)
 			{
 			    var object = this.$store.state.objects[objectName];
 				this.open(FORMS[type] (object));
 			},
+
+            /**
+             * Reset the modal window.
+             * @returns void
+             */
 			reset()
 			{
                 this.visible = false;

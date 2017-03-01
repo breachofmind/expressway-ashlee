@@ -40,7 +40,9 @@
     var SUBMIT_TIMEOUT = 800;
 
 	module.exports = {
+
 		name: "LoginForm",
+
 		data() {
 		    return {
 		        submitting: false,

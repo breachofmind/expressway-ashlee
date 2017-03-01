@@ -23,8 +23,11 @@
 
 <script>
 module.exports = {
-    mixins: [require('./_mixin')],
+
     name: "SlugInput",
+
+    mixins: [require('./_mixin')],
+
 	created()
 	{
 	    this.$parent.$on('change', $cmp => {
@@ -36,6 +39,11 @@ module.exports = {
 	},
 };
 
+/**
+ * Converts text to a slug string.
+ * @param text string
+ * @returns {string}
+ */
 function slugify(text)
 {
     return text.toString().toLowerCase()

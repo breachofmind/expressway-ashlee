@@ -1,7 +1,5 @@
 require('../scss/ashlee.scss');
 
-
-
 if (module.hot)
 {
     module.hot.accept();
