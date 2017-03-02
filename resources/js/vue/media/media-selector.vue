@@ -5,16 +5,15 @@
 				<media-object v-for="media in records" :media="media" :selected="selected"></media-object>
 			</div>
 			<div v-else>
-				<div class="al-loader"><div class="al-loader-object"></div></div>
+				<loader></loader>
 			</div>
+
+			<footer class="al-media-selector-callout" v-if="selected.length">
+				<a href="javascript:;" @click="unselectAll" title="Unselect All"><icon type="close"></icon></a>
+				<strong>{{selected.length}} </strong> selected.
+			</footer>
 		</div>
 		<div class="al-media-selector-right column small-12 medium-3">
-			<div class="callout primary" v-if="selected.length">
-				<p>
-					<a href="javascript:;" @click="unselectAll" title="Unselect All"><icon type="close"></icon></a>
-					<strong>{{selected.length}} </strong> selected.
-				</p>
-			</div>
 
 			<div class="al-input-group">
 				<label for="SizeSelector">Image Size</label>
@@ -24,10 +23,23 @@
 					<option value="medium">Medium</option>
 					<option value="large">Large</option>
 				</select>
+
+				<div v-if="selectedItem">
+					<label>URL</label>
+					<input type="text" readonly :value="selectedItem.sizes[size]">
+
+					<label>Caption</label>
+					<textarea v-model="selectedItem.caption" placeholder="Caption" @change="updateRecord(selectedItem,'caption')"></textarea>
+
+					<label>Alternate Text</label>
+					<input type="text" v-model="selectedItem.alt_text" placeholder="Alt Text" @change="updateRecord(selectedItem,'alt_text')">
+				</div>
 			</div>
 
+			<div class="al-media-selector-submit">
+				<button @click="submit" :disabled="!selected.length" class="button success">Submit</button>
+			</div>
 
-			<button @click="submit" :disabled="!selected.length" class="button success">Submit</button>
 		</div>
 
 
@@ -43,12 +55,18 @@
 	            loading: true,
 	            records: [],
 		        selected: [],
-		        size: "original"
+		        size: "original",
 	        }
 		},
 		created() {
 		    this.$parent.title = "Select Media";
 			this.fetchData();
+		},
+		computed: {
+	        selectedItem()
+	        {
+	            return this.selected.length == 1 ? this.selected[0] : null;
+	        }
 		},
 		methods: {
 	        fetchData()
@@ -65,6 +83,12 @@
 			unselectAll()
 			{
 			    this.selected = [];
+			},
+			updateRecord(record,property)
+			{
+			    this.$api.put(['media',record.id], {[property] : record[property]}).then(response => {
+			        this.$snack.success(response.data.message);
+			    });
 			},
 			submit()
 			{

@@ -58,7 +58,7 @@
 			    {
 			        setTimeout(() => {
 			            var createdObject = response.data.data;
-                        this.$snack.success(this.model.singular+" created.");
+                        this.$snack.success(response.data.message);
                         this.$modal.close();
                         this.submitting = false;
                         this.$store.commit('formSaved', {

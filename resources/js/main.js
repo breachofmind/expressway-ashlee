@@ -18,6 +18,7 @@ var componentMap = {
     "icon"                  : 'icon.vue',
     "modal"                 : 'modal.vue',
     "snackbar"              : 'snackbar.vue',
+    "loader"                : 'loader.vue',
     "overlay"               : 'overlay.vue',
     "nav-link"              : 'nav-link.vue',
     "dropdown-menu"         : "dropdown-menu.vue",

@@ -46,15 +46,43 @@ module.exports = function(app,url,paths,log,debug)
          * @param fileName string
          * @param size string
          * @param notFound string - optional
+         * @param relative {Boolean}
          * @returns {string|null}
          */
-        url(fileName, size, notFound = null)
+        url(fileName, size, notFound=null, relative=true)
         {
             let resolvedSize = this.size(fileName,size);
             if (! resolvedSize) {
                 return notFound;
             }
-            return url.get("uploads/"+resolvedSize+"/"+fileName); // Todo, dynamic
+            return url.uploads(resolvedSize+"/"+fileName,relative);
+        }
+
+        /**
+         * Return the absolute url to the file.
+         * @param fileName string
+         * @param size string
+         * @param notFound string
+         * @returns {string|null}
+         */
+        absUrl(fileName,size,notFound=null)
+        {
+            return this.url(fileName,size,notFound,false);
+        }
+
+        /**
+         * Return a hash of all size urls for an object.
+         * @param object {Media}
+         * @param notFound {String}
+         * @returns {Object}
+         */
+        getSizeUrls(object, notFound=null)
+        {
+            let sizes = {};
+            _.each(this.sizes, (value,size) => {
+                sizes[size] = this.url(object.file_name, size, notFound);
+            });
+            return sizes;
         }
 
         /**

@@ -6,6 +6,7 @@ var _     = require('lodash');
 const LABELS = {
     name: "Name",
     author: "Author",
+    slug: "Slug",
     color: "Color",
     objects: "Objects",
     active: "Active"

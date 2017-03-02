@@ -68,11 +68,12 @@ class APIResource
     /**
      * Delete a record.
      * @param paths string|array
+     * @param config object
      * @returns {*}
      */
-    delete(paths)
+    delete(paths,config=null)
     {
-        return $http.delete(__url(paths));
+        return $http.delete(__url(paths),config);
     }
 
 

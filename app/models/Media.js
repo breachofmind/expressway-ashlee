@@ -25,7 +25,8 @@ class Media extends Model
 
         // Attach the media thumbnail as the preview field.
         this.on('toJSON', function(json,model,object) {
-            json.$preview = media.url(object.file_name, 'thumb', model.noImage);
+            json.$preview = media.url(object.file_name, 'thumb', model.preview);
+            json.sizes = media.getSizeUrls(object, model.preview);
         });
     }
 

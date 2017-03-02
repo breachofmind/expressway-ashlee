@@ -1,7 +1,7 @@
 <template>
-	<div class="al-th" :class="classes">
+	<th class="data-table-th" :class="classes">
 		<a href="javascript:;" @click="sorting()">{{field.label}}</a>
-	</div>
+	</th>
 </template>
 
 <script>
@@ -20,6 +20,7 @@
                     "is-sorting": this.isSorting,
 	                "is-sorting-asc" : this.direction == 1,
 	                "is-sorting-desc" : this.direction == -1,
+	                ["is-type-"+this.field.typeName]: true
                 }
 			},
 			direction() {

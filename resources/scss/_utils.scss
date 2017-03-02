@@ -1,0 +1,28 @@
+@mixin data-table-cell($resource, $column) {
+	[data-resource="#{$resource}"] td[data-col="#{$column}"] {
+		@content;
+	}
+}
+
+.has-card-shadow {
+	background:white;
+	border-radius:$global-radius;
+	box-shadow:1px 1px 2px rgba(black,0.4);
+}
+
+.no-margin {
+	margin:0;
+}
+
+.collapse-outer {
+	> .column:first-child {padding-left:0}
+	> .column:last-child {padding-right:0}
+}
+
+.is-ghosted {
+	opacity:0.3;
+	input::-webkit-input-placeholder,
+	select::-webkit-input-placeholder {
+		color:#efefef;
+	}
+}

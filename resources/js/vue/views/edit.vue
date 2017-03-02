@@ -29,7 +29,7 @@
 				<edit-form :input="record" :options="{model:model}"></edit-form>
 			</div>
 			<div v-else class="al-layout__body is-loading">
-				<div class="al-loader"><div class="al-loader-object"></div></div>
+				<loader></loader>
 			</div>
 		</layout-page-container>
 
@@ -90,7 +90,7 @@
 		        window.setTimeout(() => {
                     this.$api.put([this.model.slug, this.record.id], this.getFieldValues()).then(response =>
 					{
-                        this.$snack.success('Updated!');
+                        this.$snack.success(response.data.message);
 
                     }).catch(this.$api.errorHandler()).then(() => {
                         this.saving = false;

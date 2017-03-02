@@ -1,48 +1,53 @@
 <template>
-	<div class="al-table-container" :class="{loading:loading}">
-		<div class="al-table">
-			<header class="al-thead">
-				<div class="al-tr">
-					<div class="al-th al-td-action" data-col="bulk" v-if="options.bulk">
-						<input type="checkbox" v-model="checkAll" @change="selectAll($event)">
-					</div>
-					<div class="al-th al-td-preview" data-col="preview" v-if="showPreview">
+	<div class="l-data-table-outer" :class="{'is-loading':loading}" :data-resource="resource">
+
+		<data-table-actions :checked="checked"></data-table-actions>
+
+		<table class="data-table">
+			<thead class="data-table-thead">
+				<tr class="data-table-tr is-th-row">
+
+					<th class="data-table-th is-td-thin is-td-center" data-col="bulk" v-if="options.bulk">
+						<input class="data-table-cb" type="checkbox" v-model="checkAll" @change="selectAll($event)">
+					</th>
+
+					<th class="data-table-th is-td-preview is-td-center" data-col="preview" v-if="showPreview">
 						<span>Preview</span>
-					</div>
+					</th>
 
-					<heading v-for="(field,column) in fields"
-					         :field="field"
-					         :column="column"
-					         :definition="model"
-					         @sort="fetchData()"
-					>
-					</heading>
+					<data-table-th v-for="(field,column) in fields"
+					               :field="field"
+					               :column="column"
+					               :definition="model"
+					               @sort="fetchData()">
+					</data-table-th>
 
-					<div class="al-th al-td-action" data-col="menu" v-if="options.menu"></div>
+					<th class="data-table-th is-td-thin" data-col="menu" v-if="options.menu"></th>
+				</tr>
+			</thead>
 
-				</div>
-			</header>
+			<tbody class="data-table-tbody">
 
-			<div class="al-tbody">
+				<tr class="data-table-tr is-empty-tr" v-if="! populated && ! loading">
+					<td class="data-table-td is-empty-td" :colspan="columns.length">
+						<span>No records found.</span>
+					</td>
+				</tr>
 
-				<div class="al-tr al-table-empty" v-if="! populated && ! loading">
-					<span>No records found.</span>
-				</div>
-
-				<row v-show="! loading" v-for="(record,index) in records"
+				<data-table-tr v-show="! loading" v-for="(record,index) in records"
 				     @selected="selectRecord(record,index)"
 				     :record="record"
 				     :index.number="index"
 				     :definition="model">
-				</row>
-			</div>
+				</data-table-tr>
 
-			<footer class="al-tfoot">
+			</tbody>
 
-			</footer>
-		</div>
+			<tfoot class="data-table-tfoot"></tfoot>
+		</table>
 
-		<div class="al-loader"><div class="al-loader-object"></div></div>
+		<loader></loader>
+
 	</div>
 </template>
 
@@ -50,7 +55,7 @@
 	var REFRESH_TIMEOUT = 300;
 
 	module.exports = {
-	    name: "CMSTable",
+	    name: "DataTable",
 		props: {
 	        // The model slug.
 	        "resource": {
@@ -73,6 +78,7 @@
 	                    bulk: true,
                         menu: true,
 		                preview:true,
+		                search: true,
 	                }
 				}
 			}
@@ -85,6 +91,7 @@
 		            where: {},
 		            sort: {}
 			    },
+			    checked: [],
 			    records: [],
 		        loading: true,
 			    checkAll: false,
@@ -155,9 +162,26 @@
 					return a.concat([]);
 			    }, [])
 			},
+			/**
+			 * Should the preview column be shown?
+			 * @returns {Boolean}
+			 */
 			showPreview()
 			{
 			    return this.options.preview == true && this.model.preview;
+			},
+
+			/**
+			 * Return the column field names.
+			 * @returns {Array}
+			 */
+			columns()
+			{
+			    var columns = [];
+			    var fields = this.fields.map(field => { return field.name });
+			    if (this.options.bulk) columns.push('bulk');
+			    if (this.showPreview) columns.push('preview');
+			    return columns.concat(fields);
 			}
 		},
 		watch: {
@@ -177,12 +201,10 @@
              */
 			fetchData()
 			{
-			    this.checkAll = false;
+			    this.reset();
 			    this.loading = true;
-			    this.$api.search(this.resource,this.searchParams).then(response => {
-                    // Attach a $selected boolean value to the record.
-                    response.data.forEach(record => { record.$selected = false });
-
+			    this.$api.search(this.resource,this.searchParams).then(response =>
+			    {
                     setTimeout(() => {
                         this.paging = response.pagination;
                         this.records = response.data;
@@ -199,8 +221,11 @@
              */
 			selectAll($event)
 			{
-                return this.records.forEach((record,index) => {
-                    record.$selected = this.checkAll;
+			    if (! this.checkAll) {
+			        return this.checked = [];
+			    }
+                return this.records.forEach(record => {
+                    this.checked.push(record);
                 });
 			},
             /**
@@ -210,12 +235,29 @@
              */
 			selectRecord(record,index)
 			{
-			    console.log(record,index);
+				var checkedIndex = this.checked.indexOf(record);
+                // Exists, remove it.
+			    if (checkedIndex > -1) {
+			        this.checked.splice(checkedIndex,1);
+			    } else {
+                    this.checked.push(record);
+			    }
+			},
+
+            /**
+             * Reset some properties on the table.
+             */
+			reset()
+			{
+			    this.checkAll = false;
+			    this.checked = [];
+			    this.$emit('reset');
 			}
 		},
 		components:{
-	        'row' : require('./row.vue'),
-	        'heading' : require('./heading.vue')
+	        'data-table-tr' : require('./row.vue'),
+	        'data-table-th' : require('./heading.vue'),
+			'data-table-actions' : require('./actions.vue')
 		}
 	}
 </script>

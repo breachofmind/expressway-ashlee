@@ -55,7 +55,8 @@ class AshleeCMSExtension extends Extension
 
         app.call(this,'bootExtensions');
 
-        url.extend('cms', this.base);
+        url.extend('cms',     this.base);
+        url.extend('uploads', this.app.root.routes.statics[0].uri + "uploads");
 
         // Add the installation seeder.
         app.load(require('./db/installer'));

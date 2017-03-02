@@ -1,6 +1,9 @@
 .button {
 	box-shadow:1px 1px 1px rgba(black,0.2);
 	text-transform: uppercase;
+	.al-icon svg {
+		fill: white;
+	}
 }
 .button.success,
 .button.success:hover,
@@ -14,7 +17,9 @@
 	background:none;
 	color:$primary-color;
 	box-shadow:none;
-	.al-icon svg {fill:$primary-color;}
+	.al-icon svg {
+		fill:$primary-color;
+	}
 	&:hover, &:focus {
 		background:#efefef;
 	}
